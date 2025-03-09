@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -9,8 +8,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { handleLogin } from "@/lib/auth/handleLogin.util";
+import { useAppDispatch } from "@/store/store";
+import { login } from "@/store/slices/user.slice";
 
 export default function AuthForm() {
+	const dispatch = useAppDispatch(); // Redux dispatch hook
+
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
@@ -23,16 +26,22 @@ export default function AuthForm() {
 		});
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
-        // TODO: Handle form submission
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		handleLogin(formData)
-		console.log(formData);
+
+		try {
+			const { userName, jwtToken } = await handleLogin(formData);
+
+			dispatch(login({ userName, jwtToken }));
+
+			console.log("User logged in:", { userName, jwtToken });
+		} catch (error) {
+			console.error("Login failed:", error);
+		}
 	};
 
 	return (
 		<div className='flex min-h-screen flex-col items-center justify-center md:flex-row md:gap-12 p-4 bg-[#F7F9FB]'>
-
 			<div className='flex flex-col items-center mb-8 md:mb-0 md:bg-[#F7F9FB] md:p-12 md:rounded-lg'>
 				<Image
 					src={"/logo.png"}
