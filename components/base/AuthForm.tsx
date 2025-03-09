@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { handleLogin } from "@/lib/auth/handleLogin.util";
 
 export default function AuthForm() {
 	const [formData, setFormData] = useState({
@@ -25,6 +26,7 @@ export default function AuthForm() {
 	const handleSubmit = (e: React.FormEvent) => {
         // TODO: Handle form submission
 		e.preventDefault();
+		handleLogin(formData)
 		console.log(formData);
 	};
 
