@@ -17,7 +17,27 @@ const AppSidebar = () => {
 		<Sidebar
 			variant='floating'
 			collapsible='icon'
-		></Sidebar>
+		>
+			<SidebarHeader className='mb-8'>
+				<UserProfileHeader />
+			</SidebarHeader>
+
+			{/* Content */}
+			<SidebarContent>
+				<SidebarGroup>
+					<SidebarGroupContent>
+						<SidebarMenu>
+							<SidebarItems />
+						</SidebarMenu>
+					</SidebarGroupContent>
+				</SidebarGroup>
+			</SidebarContent>
+
+			{/* Footer */}
+			<SidebarFooter>
+				<Footer />
+			</SidebarFooter>
+		</Sidebar>
 	);
 };
 
