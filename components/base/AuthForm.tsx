@@ -11,4 +11,14 @@ import { Label } from "@/components/ui/label";
 
 
 export default function AuthForm() {
-	}
+	const [formData, setFormData] = useState({
+		email: "",
+		password: "",
+	});
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setFormData({
+			...formData,
+			[e.target.id]: e.target.value,
+		});
+	};
