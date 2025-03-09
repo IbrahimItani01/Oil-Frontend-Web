@@ -22,3 +22,9 @@ export default function AuthForm() {
 			[e.target.id]: e.target.value,
 		});
 	};
+	const handleSubmit = (e: React.FormEvent) => {
+        // TODO: Handle form submission
+		e.preventDefault();
+		console.log(formData);
+	};
+
