@@ -44,8 +44,7 @@ const NotificationsMobile = () => {
 						aria-label='Open notifications'
 					>
 						<Bell
-							size={30}
-							className='h-5 w-5'
+							className='h-10 w-10'
 						/>
 						{notifications.length > 0 && (
 							<span className='absolute right-2 top-2 h-2 w-2 rounded-full bg-primary' />
