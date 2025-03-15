@@ -1,11 +1,8 @@
-import React from 'react'
+import DashboardStats from "@/components/base/DashboardStats";
+import React from "react";
 
 const page = () => {
-  return (
-    <div>
-      Home
-    </div>
-  )
-}
+	return <DashboardStats />;
+};
 
-export default page
+export default page;
