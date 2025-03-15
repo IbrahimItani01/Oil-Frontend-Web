@@ -4,7 +4,7 @@ export interface Notification {
 	id: string;
 	avatar: string;
 	name: string;
-	action: "booked" | "canceled";
+	action: string;
 	timestamp: string;
 }
 
@@ -25,8 +25,7 @@ export function NotificationCard({
 			<div className='flex flex-col gap-1'>
 				<p className='text-sm'>
 					<span className='font-medium'>{notification.name}</span>{" "}
-					{notification.action === "booked" ? "booked" : "canceled"} their
-					appointment
+					{notification.action}
 				</p>
 				<p className='text-sm text-muted-foreground'>
 					{notification.timestamp}
