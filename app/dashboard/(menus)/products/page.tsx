@@ -1,11 +1,8 @@
-import React from 'react'
+import { ProductsTable } from "@/components/base/dashboard/stats/SalesTable";
+import React from "react";
 
 const page = () => {
-  return (
-    <div>
-      <p>Products</p>
-    </div>
-  )
-}
+	return <ProductsTable />;
+};
 
-export default page
+export default page;

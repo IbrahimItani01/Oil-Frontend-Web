@@ -1,11 +1,8 @@
-import React from "react";
+"use client";
+import EmployeesTable from "@/components/base/tables/EmployeesTable";
 
-const page = () => {
-	return (
-		<div>
-			<p>Employees</p>
-		</div>
-	);
+const EmployeesPage = () => {
+	return <EmployeesTable />;
 };
 
-export default page;
+export default EmployeesPage;

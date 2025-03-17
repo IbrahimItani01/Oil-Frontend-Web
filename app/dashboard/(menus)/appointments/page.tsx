@@ -1,11 +1,8 @@
-import React from 'react'
+import AppointmentsTable from "@/components/base/tables/AppointmentsTable";
+import React from "react";
 
 const page = () => {
-  return (
-    <div>
-      <p>Appointments</p>
-    </div>
-  )
-}
+	return <AppointmentsTable />;
+};
 
-export default page
+export default page;
