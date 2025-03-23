@@ -7,10 +7,9 @@ import { SidebarTrigger } from "../ui/sidebar";
 
 interface DashboardHeaderProps {
 	onSearch?: (search: string) => void;
-	onAdd?: () => void;
 }
 
-export function DashboardHeader({ onSearch, onAdd }: DashboardHeaderProps) {
+export function DashboardHeader({ onSearch }: DashboardHeaderProps) {
 	const pathname = usePathname();
 	const title = pathname.split("/").pop() || "Dashboard";
 
@@ -29,7 +28,7 @@ export function DashboardHeader({ onSearch, onAdd }: DashboardHeaderProps) {
 				</h1>
 			</div>
 			<div className='flex items-center gap-2'>
-				<HeaderAddButton onClick={onAdd} />
+				<HeaderAddButton />
 				<HeaderSearchBar onChange={onSearch} />
 			</div>
 		</header>
