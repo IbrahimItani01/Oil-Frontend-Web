@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -7,10 +8,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useDataTableContext } from "@/hooks/context/DataTableContext";
 import { MoreHorizontal } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const DropdownActions = () => {
 	const { actions } = useDataTableContext();
+	const pathname = usePathname();
 
+	const handleAction = (action: string) => {
+		if (pathname.includes("employess")) {
+			// TODO: handle either cash-out or delete
+		} else if (pathname.includes("users")) {
+			// TODO: handle block user
+		}
+	};
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -24,8 +34,13 @@ const DropdownActions = () => {
 			<DropdownMenuContent align='end'>
 				{actions.map((action, i) => (
 					<DropdownMenuItem
-						variant={action === "delete" || action.includes("block") ? "destructive" : "default"}
+						variant={
+							action === "delete" || action.includes("block")
+								? "destructive"
+								: "default"
+						}
 						key={i}
+						onClick={() => handleAction(action)}
 					>
 						{action}
 					</DropdownMenuItem>
