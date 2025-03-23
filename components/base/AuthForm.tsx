@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { handleLogin } from "@/lib/auth/handleLogin.util";
 import { useAppDispatch } from "@/store/store";
 import { login } from "@/store/slices/user.slice";
+import { handleLogin } from "@/apis/auth.apis";
 
 export default function AuthForm() {
 	const dispatch = useAppDispatch(); // Redux dispatch hook
@@ -31,7 +31,7 @@ export default function AuthForm() {
 
 		try {
 			const { userName, jwtToken } = await handleLogin(formData);
-
+			localStorage.setItem("token", jwtToken);
 			dispatch(login({ userName, jwtToken }));
 
 			console.log("User logged in:", { userName, jwtToken });
