@@ -94,4 +94,4 @@ export const employeesData = [
 	},
 ];
 
-export const employeesActions = ["cashout", "delete"];
+export const employeesActions = ["cash-out", "delete"];

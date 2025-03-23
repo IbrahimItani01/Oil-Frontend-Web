@@ -7,7 +7,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useDataTableContext } from "@/hooks/context/DataTableContext";
-import { MoreHorizontal } from "lucide-react";
+import { DollarSign, MoreHorizontal, Trash } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const DropdownActions = () => {
@@ -20,6 +20,13 @@ const DropdownActions = () => {
 		} else if (pathname.includes("users")) {
 			// TODO: handle block user
 		}
+	};
+
+	const formatAction = (action: string) => {
+		return action
+			.split(/[-\s]/) // Split by "-" or spaces
+			.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+			.join(" ");
 	};
 	return (
 		<DropdownMenu>
@@ -42,7 +49,14 @@ const DropdownActions = () => {
 						key={i}
 						onClick={() => handleAction(action)}
 					>
-						{action}
+						{/* Conditional Icon Rendering */}
+						{action === "delete" || action.includes("block") ? (
+							<Trash className='w-4 h-4 mr-2 text-red-500' />
+						) : action === "cash-out" ? (
+							<DollarSign className='w-4 h-4 mr-2' />
+						) : null}
+
+						{formatAction(action)}
 					</DropdownMenuItem>
 				))}
 			</DropdownMenuContent>
