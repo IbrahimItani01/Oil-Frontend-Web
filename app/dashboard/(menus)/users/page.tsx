@@ -1,4 +1,4 @@
-import UsersTable from "@/components/base/tables/UsersTable";
+import UsersTable from "@/components/base/tables/usersTable/UsersTable";
 import React from "react";
 
 const page = () => {
