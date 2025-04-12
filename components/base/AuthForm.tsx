@@ -10,14 +10,17 @@ import { Label } from "@/components/ui/label";
 import { useAppDispatch } from "@/store/store";
 import { login } from "@/store/slices/user.slice";
 import { handleLogin } from "@/apis/auth.apis";
+import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 export default function AuthForm() {
 	const dispatch = useAppDispatch(); // Redux dispatch hook
-
+	const navigate = useRouter();
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
 	});
+	const [isloading, setisLoading] = useState(false);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setFormData({
@@ -30,11 +33,14 @@ export default function AuthForm() {
 		e.preventDefault();
 
 		try {
+			setisLoading(true)
 			const { userName, jwtToken } = await handleLogin(formData);
 			localStorage.setItem("token", jwtToken);
 			dispatch(login({ userName, jwtToken }));
 
 			console.log("User logged in:", { userName, jwtToken });
+			navigate.push("/dashboard");
+			setisLoading(false)
 		} catch (error) {
 			console.error("Login failed:", error);
 		}
@@ -100,6 +106,7 @@ export default function AuthForm() {
 							type='submit'
 							className='w-full bg-black hover:bg-gray-800 text-white rounded-full py-6 cursor-pointer'
 						>
+							{isloading && <Loader2 className='animate-spin' />}
 							Login
 						</Button>
 					</form>

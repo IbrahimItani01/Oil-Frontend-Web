@@ -18,7 +18,7 @@ export const handleLogin = async ({
 	password,
 }: Login): Promise<LoginReturn> => {
 	try {
-		const response = await axios.post(`${process.env.APIS_URL}/auth/login`, {
+		const response = await axios.post(`${process.env.NEXT_PUBLIC_APIS_URL}/admin/login`, {
 			email,
 			password,
 		});
