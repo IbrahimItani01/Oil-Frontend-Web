@@ -1,19 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import {
-	usersActions,
-	usersColumns,
-	usersData,
-} from "@/lib/content/users.content";
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from "@/components/ui/table";
+import { usersActions, usersData } from "@/lib/content/users.content";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -23,15 +12,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Calendar, MoreHorizontal, Trash2 } from "lucide-react";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
-import { AlertCircle } from "lucide-react";
+
+import UserTableHeader from "./base/UserTableHeader";
+import UserDropDown from "./base/UserDropDown";
+import ConfirmModal from "./base/ConfirmModal";
 
 const UsersTable = () => {
 	const [selectedUser, setSelectedUser] = useState<string | null>(null);
@@ -41,21 +25,7 @@ const UsersTable = () => {
 	return (
 		<div className='w-full relative'>
 			<Table>
-				<TableHeader>
-					<TableRow className='bg-gray-50'>
-						{usersColumns.map((column) => (
-							<TableHead
-								key={column.id}
-								className='text-gray-500 font-normal'
-							>
-								{column.label}
-							</TableHead>
-						))}
-						<TableHead className='text-right text-gray-500 font-normal'>
-							Actions
-						</TableHead>
-					</TableRow>
-				</TableHeader>
+				<UserTableHeader />
 				<TableBody>
 					{usersData.map((user) => (
 						<TableRow key={user.id}>
@@ -147,70 +117,15 @@ const UsersTable = () => {
 			</Table>
 
 			{/* Actions Dropdown Panel (shown on the right in the image) */}
-			{selectedUser && (
-				<div className='absolute right-0 top-0 w-64 bg-white shadow-lg rounded-md p-4 border'>
-					<h3 className='text-lg font-medium mb-4'>Actions Dropdown</h3>
-					<Button
-						variant='outline'
-						className='w-full justify-start gap-2 text-red-500 border-gray-200'
-						onClick={() => {
-							// Handle block user action
-							setSelectedUser(null);
-						}}
-					>
-						<Trash2 className='h-4 w-4' />
-						Block User
-					</Button>
-				</div>
-			)}
+			{selectedUser && <UserDropDown setSelectedUser={setSelectedUser} />}
 
 			{/* Confirmation Modal */}
-			<Dialog
-				open={showBlockModal}
-				onOpenChange={setShowBlockModal}
-			>
-				<DialogContent className='sm:max-w-md'>
-					<DialogHeader>
-						<DialogTitle className='flex items-center gap-2'>
-							<AlertCircle className='h-5 w-5 text-red-500' />
-							Block User
-						</DialogTitle>
-						<DialogDescription>
-							Are you sure you want to block this user? This action cannot be
-							undone.
-						</DialogDescription>
-					</DialogHeader>
-					<DialogFooter className='sm:justify-start gap-2 mt-4'>
-						<Button
-							type='button'
-							variant='destructive'
-							onClick={() => {
-								// Find the block action and execute it
-								const blockAction = usersActions.find(
-									(action) => action.label === "Block User"
-								);
-								if (blockAction && userToBlock) {
-									blockAction.onClick(userToBlock);
-								}
-								setShowBlockModal(false);
-								setUserToBlock(null);
-							}}
-						>
-							Yes, Block User
-						</Button>
-						<Button
-							type='button'
-							variant='outline'
-							onClick={() => {
-								setShowBlockModal(false);
-								setUserToBlock(null);
-							}}
-						>
-							Cancel
-						</Button>
-					</DialogFooter>
-				</DialogContent>
-			</Dialog>
+			<ConfirmModal
+				setShowBlockModal={setShowBlockModal}
+				setUserToBlock={setUserToBlock}
+				showBlockModal={showBlockModal}
+				userToBlock={userToBlock}
+			/>
 		</div>
 	);
 };

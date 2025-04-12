@@ -10,7 +10,6 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
-		console.log("token: ", token)
 		if (token) {
 			dispatch(fetchInitialData(token));
 			router.push("/dashboard");
