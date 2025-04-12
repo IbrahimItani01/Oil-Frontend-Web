@@ -1,10 +1,9 @@
 import axios from "axios";
-import { headers } from "next/headers";
 
-export const handleBlockUser = async (token: string, phone: string) => {
+export const handleBlockUser = async (token: string, phone: string | null) => {
 	try {
 		await axios.post(
-			`${process.env.APIS_URL}/admin/block_user`,
+			`${process.env.NEXT_PUBLIC_APIS_URL}/admin/block_user`,
 			{
 				phone_number: phone,
 			},

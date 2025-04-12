@@ -1,5 +1,4 @@
 import React from "react";
-import DataTable from "../dataTable/DataTable";
 import {
 	employeesActions,
 	employeesColumns,
@@ -8,11 +7,7 @@ import {
 
 const EmployeesTable = () => {
 	return (
-		<DataTable
-			columns={employeesColumns}
-			data={employeesData}
-			actions={employeesActions}
-		/>
+		<div>hi</div>
 	);
 };
 

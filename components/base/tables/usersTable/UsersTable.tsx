@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usersActions, usersData } from "@/lib/content/users.content";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import {
@@ -21,14 +21,24 @@ const UsersTable = () => {
 	const [selectedUser, setSelectedUser] = useState<string | null>(null);
 	const [showBlockModal, setShowBlockModal] = useState(false);
 	const [userToBlock, setUserToBlock] = useState<string | null>(null);
-
+	const [blockedUsers, setBlockedUsers] = useState<Set<string>>(new Set());
+	useEffect(() => {
+		console.log(blockedUsers);
+	}, [setBlockedUsers]);
 	return (
 		<div className='w-full relative'>
 			<Table>
 				<UserTableHeader />
 				<TableBody>
 					{usersData.map((user) => (
-						<TableRow key={user.id}>
+						<TableRow
+							key={user.id}
+							className={
+								blockedUsers.has(user.phoneNumber)
+									? "line-through opacity-60"
+									: ""
+							}
+						>
 							<TableCell className='font-medium'>{user.id}</TableCell>
 							<TableCell>
 								<div className='flex items-center gap-2'>
@@ -88,9 +98,11 @@ const UsersTable = () => {
 											<DropdownMenuItem
 												key={action.id}
 												onClick={() => {
-													if (action.label === "Block User") {
+													if (action.label === "Block/Un-block User") {
 														setUserToBlock(user.phoneNumber);
 														setShowBlockModal(true);
+                            setSelectedUser(user.id);
+														action.onClick(user.id);
 													} else {
 														setSelectedUser(user.id);
 														action.onClick(user.id);
@@ -98,13 +110,16 @@ const UsersTable = () => {
 												}}
 												className='cursor-pointer'
 											>
-												{action.label === "Block User" ? (
+												{action.label === "Block/Un-block User" ? (
 													<div className='flex items-center gap-2 text-red-500'>
 														<Trash2 className='h-4 w-4' />
-														<span>Block User</span>
+														<span>Block/Un-block User</span>
 													</div>
 												) : (
-													action.label
+													<div className='flex items-center gap-2 text-red-500'>
+														<Trash2 className='h-4 w-4' />
+														<span>Block/Un-block User</span>
+													</div>
 												)}
 											</DropdownMenuItem>
 										))}
@@ -116,15 +131,14 @@ const UsersTable = () => {
 				</TableBody>
 			</Table>
 
-			{/* Actions Dropdown Panel (shown on the right in the image) */}
-			{selectedUser && <UserDropDown setSelectedUser={setSelectedUser} />}
-
 			{/* Confirmation Modal */}
 			<ConfirmModal
 				setShowBlockModal={setShowBlockModal}
 				setUserToBlock={setUserToBlock}
 				showBlockModal={showBlockModal}
 				userToBlock={userToBlock}
+				setIsBlocked={setBlockedUsers}
+				blockedUsers={blockedUsers}
 			/>
 		</div>
 	);
