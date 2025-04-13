@@ -1,5 +1,4 @@
 import React from "react";
-import { usersActions } from "@/lib/content/users.content";
 import { Button } from "@/components/ui/button";
 import {
 	Dialog,
@@ -11,37 +10,35 @@ import {
 } from "@/components/ui/dialog";
 import { AlertCircle } from "lucide-react";
 import { handleBlockUser } from "@/apis/users.apis";
+import { useAppDispatch, useAppSelector } from "@/store/store";
+import { toggleBlockStatus } from "@/store/slices/users.slice";
+
 interface ConfirmModalProp {
 	showBlockModal: boolean;
 	setShowBlockModal: (n: boolean) => void;
 	userToBlock: string | null;
 	setUserToBlock: (n: string | null) => void;
-	setIsBlocked: (n: any) => void;
-	blockedUsers: any;
 }
+
 const ConfirmModal = ({
 	showBlockModal,
 	setShowBlockModal,
 	userToBlock,
 	setUserToBlock,
-	setIsBlocked,
-	blockedUsers,
 }: ConfirmModalProp) => {
+	const dispatch = useAppDispatch();
+	const user = useAppSelector((state) =>
+		state.users.users.find((u) => u.id === userToBlock)
+	);
+
+	if (!user) return null;
+
+	const isBlocked = user.status === "blocked";
+
 	const handleUserBlock = async () => {
 		const token = localStorage.token;
 		await handleBlockUser(token, userToBlock);
-
-		setIsBlocked((prev: Set<string>) => {
-			const updated = new Set(prev);
-			if (userToBlock) {
-				if (updated.has(userToBlock)) {
-					updated.delete(userToBlock); // unblocking
-				} else {
-					updated.add(userToBlock); // blocking
-				}
-			}
-			return updated;
-		});
+		dispatch(toggleBlockStatus(user.id));
 		setShowBlockModal(false);
 		setUserToBlock(null);
 	};
@@ -55,13 +52,10 @@ const ConfirmModal = ({
 				<DialogHeader>
 					<DialogTitle className='flex items-center gap-2'>
 						<AlertCircle className='h-5 w-5 text-red-500' />
-						{blockedUsers.has(userToBlock ?? "")
-							? "Unblock User"
-							: "Block User"}
+						{isBlocked ? "Unblock User" : "Block User"}
 					</DialogTitle>
 					<DialogDescription>
-						Are you sure you want to{" "}
-						{blockedUsers.has(userToBlock ?? "") ? "unblock" : "block"} this
+						Are you sure you want to {isBlocked ? "unblock" : "block"} this
 						user?
 					</DialogDescription>
 				</DialogHeader>
@@ -71,8 +65,7 @@ const ConfirmModal = ({
 						variant='destructive'
 						onClick={handleUserBlock}
 					>
-						Yes, {blockedUsers.has(userToBlock ?? "") ? "Unblock" : "Block"}{" "}
-						User
+						Yes, {isBlocked ? "Unblock" : "Block"} User
 					</Button>
 					<Button
 						type='button'
@@ -80,7 +73,6 @@ const ConfirmModal = ({
 						onClick={() => {
 							setShowBlockModal(false);
 							setUserToBlock(null);
-							setIsBlocked((prev) => new Set(prev).add(userToBlock));
 						}}
 					>
 						Cancel

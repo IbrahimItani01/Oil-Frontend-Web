@@ -2,10 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import userReducer from "./slices/user.slice";
 import appReducer from "./slices/app.slice";
+import usersReducer from "./slices/users.slice";
+import employeesReducer from "./slices/employees.slice";
 export const store = configureStore({
 	reducer: {
 		user: userReducer,
 		app: appReducer,
+		users: usersReducer,
+		employees: employeesReducer,
 	},
 });
 

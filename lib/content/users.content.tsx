@@ -12,14 +12,14 @@ interface Action {
 	onClick: (userId: string) => void;
 }
 
-interface User {
+export interface User {
 	id: string;
 	name: string;
 	avatar: string;
 	phoneNumber: string;
 	email: string;
 	nextAppointment: string | null;
-	status: string;
+	status: "blocked" | "active";
 }
 
 export const usersColumns: Column[] = [
@@ -49,7 +49,7 @@ export const usersData: User[] = [
 		phoneNumber: "+961 3 123 456",
 		email: "natali@gmail.com",
 		nextAppointment: null,
-		status: "Blocked",
+		status: "blocked",
 	},
 	{
 		id: "#CM9802",
@@ -58,7 +58,7 @@ export const usersData: User[] = [
 		phoneNumber: "+961 3 123 457",
 		email: "kate@gmail.com",
 		nextAppointment: null,
-		status: "Active",
+		status: "active",
 	},
 	{
 		id: "#CM9803",
@@ -67,7 +67,7 @@ export const usersData: User[] = [
 		phoneNumber: "+961 3 123 458",
 		email: "drew@gmail.com",
 		nextAppointment: "Tomorrow 4:00 PM",
-		status: "Active",
+		status: "active",
 	},
 	{
 		id: "#CM9804",
@@ -76,7 +76,7 @@ export const usersData: User[] = [
 		phoneNumber: "+961 3 123 459",
 		email: "orlando@gmail.com",
 		nextAppointment: "Thursday 21, 4 5:00 PM",
-		status: "Active",
+		status: "active",
 	},
 	{
 		id: "#CM9805",
@@ -85,6 +85,6 @@ export const usersData: User[] = [
 		phoneNumber: "+961 3 123 434",
 		email: "andi@gmail.com",
 		nextAppointment: null,
-		status: "Active",
+		status: "active",
 	},
 ];

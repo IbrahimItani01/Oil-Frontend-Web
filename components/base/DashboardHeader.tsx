@@ -5,11 +5,9 @@ import HeaderAddButton from "./dashboard/header/HeaderAddButton";
 import HeaderSearchBar from "./dashboard/header/HeaderSearchBar";
 import { SidebarTrigger } from "../ui/sidebar";
 
-interface DashboardHeaderProps {
-	onSearch?: (search: string) => void;
-}
+interface DashboardHeaderProps {}
 
-export function DashboardHeader({ onSearch }: DashboardHeaderProps) {
+export function DashboardHeader({}: DashboardHeaderProps) {
 	const pathname = usePathname();
 	const title = pathname.split("/").pop() || "Dashboard";
 
@@ -29,7 +27,7 @@ export function DashboardHeader({ onSearch }: DashboardHeaderProps) {
 			</div>
 			<div className='flex items-center gap-2'>
 				<HeaderAddButton />
-				<HeaderSearchBar onChange={onSearch} />
+				<HeaderSearchBar />
 			</div>
 		</header>
 	);
