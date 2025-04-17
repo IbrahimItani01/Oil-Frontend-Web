@@ -19,7 +19,7 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 			dispatch(setEmployees(employeesData));
 			router.push("/dashboard");
 		} else {
-			router.push("/");
+			router.push("/auth");
 		}
 	}, [dispatch, router]);
 
