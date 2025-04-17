@@ -13,8 +13,12 @@ import { Button } from "@/components/ui/button";
 import { Calendar, MoreHorizontal, Trash2 } from "lucide-react";
 
 import UserTableHeader from "./base/UserTableHeader";
-import ConfirmModal from "./base/ConfirmModal";
+import ConfirmModal from "./ConfirmModal";
 import { useAppSelector } from "@/store/store";
+import UserNameCell from "./base/UserNameCell";
+import UserNextAppointment from "./base/UserNextAppointment";
+import UserStatusCell from "./base/UserStatusCell";
+import UserActionDropdown from "./base/UserActionDropdown";
 
 const UsersTable = () => {
 	const users = useAppSelector((state) => state.users.queriedUsers);
@@ -36,87 +40,14 @@ const UsersTable = () => {
 							}
 						>
 							<TableCell className='font-medium'>{user.id}</TableCell>
-							<TableCell>
-								<div className='flex items-center gap-2'>
-									<Avatar className='h-8 w-8'>
-										<AvatarImage
-											src={user.avatar || "/placeholder.svg"}
-											alt={user.name}
-										/>
-										<AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-									</Avatar>
-									<span>{user.name}</span>
-								</div>
-							</TableCell>
+							<UserNameCell user={user} />
 							<TableCell>{user.phoneNumber}</TableCell>
 							<TableCell>{user.email}</TableCell>
-							<TableCell>
-								{user.nextAppointment ? (
-									<div className='flex items-center gap-2'>
-										<Calendar className='h-4 w-4' />
-										<span>{user.nextAppointment}</span>
-									</div>
-								) : (
-									<span>-</span>
-								)}
-							</TableCell>
-							<TableCell>
-								<div className='flex items-center gap-2'>
-									<span
-										className={`h-2 w-2 rounded-full ${
-											user.status === "active" ? "bg-blue-400" : "bg-red-400"
-										}`}
-									></span>
-									<span
-										className={
-											user.status === "active"
-												? "text-blue-400"
-												: "text-red-400"
-										}
-									>
-										{user.status}
-									</span>
-								</div>
-							</TableCell>
-							<TableCell className='text-right'>
-								<DropdownMenu>
-									<DropdownMenuTrigger asChild>
-										<Button
-											variant='ghost'
-											className='h-8 w-8 p-0'
-										>
-											<span className='sr-only'>Open menu</span>
-											<MoreHorizontal className='h-4 w-4' />
-										</Button>
-									</DropdownMenuTrigger>
-									<DropdownMenuContent align='end'>
-										{usersActions.map((action) => (
-											<DropdownMenuItem
-												key={action.id}
-												onClick={() => {
-													setSelectedUser(user.id);
-													if (action.label === "Block/Un-block User") {
-														setUserToBlock(user.id);
-														setShowBlockModal(true);
-													}
-													action.onClick(user.id);
-												}}
-												className='cursor-pointer'
-											>
-												<div className='flex items-center gap-2 text-red-500'>
-													<Trash2 className='h-4 w-4' />
-													<span>{action.label}</span>
-												</div>
-											</DropdownMenuItem>
-										))}
-									</DropdownMenuContent>
-								</DropdownMenu>
-							</TableCell>
-							<ConfirmModal
-								setShowBlockModal={setShowBlockModal}
-								setUserToBlock={setUserToBlock}
-								showBlockModal={showBlockModal}
-								userToBlock={userToBlock}
+							<UserNextAppointment user={user} />
+							<UserStatusCell user={user} />
+							<UserActionDropdown
+								user={user}
+								userActions={usersActions}
 							/>
 						</TableRow>
 					))}
