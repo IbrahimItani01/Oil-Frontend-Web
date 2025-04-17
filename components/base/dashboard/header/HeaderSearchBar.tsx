@@ -2,7 +2,7 @@
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { usePathname } from "next/navigation";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setQueriedUsers } from "@/store/slices/users.slice";
@@ -12,43 +12,40 @@ interface SearchBarProps {
 }
 
 const HeaderSearchBar = ({
-	placeholder = "Press enter to search",
+	placeholder = "Type to search...",
 }: SearchBarProps) => {
 	const pathname = usePathname();
 	const dispatch = useDispatch();
 	const allUsers = useSelector((state: RootState) => state.users.users);
 	const [value, setValue] = useState("");
 
-	const handleSearch = useCallback(() => {
-		if (pathname === "/dashboard/users") {
-			if (!value.trim()) {
-				dispatch(setQueriedUsers(allUsers));
-				return;
+	const handleSearch = useCallback(
+		(searchVal: string) => {
+			if (pathname === "/dashboard/users") {
+				const trimmed = searchVal.trim();
+				if (!trimmed) {
+					dispatch(setQueriedUsers(allUsers));
+					return;
+				}
+				const filtered = allUsers.filter((user) =>
+					user.name.toLowerCase().includes(trimmed.toLowerCase())
+				);
+				dispatch(setQueriedUsers(filtered));
 			}
-			const filtered = allUsers.filter((user) =>
-				user.name.toLowerCase().includes(value.toLowerCase())
-			);
-			dispatch(setQueriedUsers(filtered));
-		}
 
-		// 👉 Add more pathname conditions for other logic
-	}, [value, allUsers, dispatch, pathname]);
-
-	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter") {
-			handleSearch();
-		}
-	};
+			// 👉 Add more pathname conditions for other logic
+		},
+		[allUsers, dispatch, pathname]
+	);
 
 	const handleChange = (val: string) => {
 		setValue(val);
-
-		if (pathname === "/dashboard/users" && val === "") {
-			dispatch(setQueriedUsers(allUsers));
-		}
+		handleSearch(val);
 
 		// 👉 Handle resets for other paths here if needed
 	};
+
+	if (pathname === "/dashboard") return null;
 
 	return (
 		<div className='relative w-[100%] max-w-[350px] min-w-[180px]'>
@@ -58,7 +55,6 @@ const HeaderSearchBar = ({
 				placeholder={placeholder}
 				value={value}
 				onChange={(e) => handleChange(e.target.value)}
-				onKeyDown={handleKeyDown}
 				className='pl-9 h-9'
 			/>
 		</div>
