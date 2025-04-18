@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import HeaderAddButton from "./dashboard/header/HeaderAddButton";
 import HeaderSearchBar from "./dashboard/header/HeaderSearchBar";
 import { SidebarTrigger } from "../ui/sidebar";
+import FilterTabs from "./dashboard/header/FilterTabs";
 
 interface DashboardHeaderProps {}
 
@@ -23,6 +24,9 @@ export function DashboardHeader({}: DashboardHeaderProps) {
 				<h1 className='text-2xl font-semibold tracking-tight'>
 					{formattedTitle}
 				</h1>
+				<div className="pl-4 ">
+					<FilterTabs />
+				</div>
 			</div>
 			<div className='flex items-center gap-2'>
 				<HeaderAddButton />
