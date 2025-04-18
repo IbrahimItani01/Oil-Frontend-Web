@@ -1,6 +1,4 @@
 "use client";
-import { useState } from "react";
-import { usersActions } from "@/lib/content/users.content";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 
 import UserTableHeader from "./base/UserTableHeader";
@@ -19,12 +17,7 @@ const UsersTable = () => {
 				<UserTableHeader />
 				<TableBody>
 					{users.map((user) => (
-						<TableRow
-							key={user.id}
-							className={
-								user.status === "blocked" ? "line-through opacity-60" : ""
-							}
-						>
+						<TableRow key={user.id}>
 							<TableCell className='font-medium'>{user.id}</TableCell>
 							<UserNameCell user={user} />
 							<TableCell>{user.phoneNumber}</TableCell>

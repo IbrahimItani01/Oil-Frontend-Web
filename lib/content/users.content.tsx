@@ -41,6 +41,27 @@ export const usersActions: Action[] = [
 	},
 ];
 
+export const usersFilterDefault = "all";
+export interface Filter {
+	value: string;
+	label: string;
+}
+
+export const usersFilters: Filter[] = [
+	{
+		value: "all",
+		label: "All",
+	},
+	{
+		value: "active",
+		label: "Active",
+	},
+	{
+		value: "blocked",
+		label: "Blocked",
+	},
+];
+
 export const usersData: User[] = [
 	{
 		id: "#CM9801",
@@ -86,5 +107,23 @@ export const usersData: User[] = [
 		email: "andi@gmail.com",
 		nextAppointment: null,
 		status: "active",
+	},
+	{
+		id: "#CM9806",
+		name: "John Doe",
+		avatar: "/placeholder.svg?height=32&width=32",
+		phoneNumber: "+961 3 123 456",
+		email: "john@gmail.com",
+		nextAppointment: null,
+		status: "blocked",
+	},
+	{
+		id: "#CM9807",
+		name: "Nabiha Nabiha",
+		avatar: "/placeholder.svg?height=32&width=32",
+		phoneNumber: "+961 3 123 456",
+		email: "nabiha@gmail.com",
+		nextAppointment: null,
+		status: "blocked",
 	},
 ];

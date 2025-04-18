@@ -18,24 +18,40 @@ const HeaderSearchBar = ({
 	const dispatch = useDispatch();
 	const allUsers = useSelector((state: RootState) => state.users.users);
 	const [value, setValue] = useState("");
+	const selectedStatus = useSelector(
+		(state: RootState) => state.users.selectedStatus
+	);
 
 	const handleSearch = useCallback(
 		(searchVal: string) => {
 			if (pathname === "/dashboard/users") {
 				const trimmed = searchVal.trim();
+
+				// 🔄 Reset filter on empty search
 				if (!trimmed) {
-					dispatch(setQueriedUsers(allUsers));
+					const filtered = selectedStatus
+						? allUsers.filter((user) => user.status === selectedStatus)
+						: allUsers;
+
+					dispatch(setQueriedUsers(filtered));
 					return;
 				}
-				const filtered = allUsers.filter((user) =>
-					user.name.toLowerCase().includes(trimmed.toLowerCase())
-				);
+
+				// 🔍 Apply search + status filter
+				const filtered = allUsers.filter((user) => {
+					const matchesName = user.name
+						.toLowerCase()
+						.includes(trimmed.toLowerCase());
+					const matchesStatus = selectedStatus
+						? user.status === selectedStatus
+						: true;
+					return matchesName && matchesStatus;
+				});
+
 				dispatch(setQueriedUsers(filtered));
 			}
-
-			// 👉 Add more pathname conditions for other logic
 		},
-		[allUsers, dispatch, pathname]
+		[allUsers, dispatch, pathname, selectedStatus]
 	);
 
 	const handleChange = (val: string) => {

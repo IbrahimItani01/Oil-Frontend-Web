@@ -15,12 +15,14 @@ interface UsersState {
 	users: User[];
 	queriedUsers: User[];
 	modifiedUsers: User[];
+	selectedStatus: string | null;
 }
 
 const initialState: UsersState = {
 	users: [],
 	queriedUsers: [],
 	modifiedUsers: [],
+	selectedStatus: null,
 };
 const usersSlice = createSlice({
 	name: "users",
@@ -64,6 +66,9 @@ const usersSlice = createSlice({
 			updateStatus(state.queriedUsers);
 			state.modifiedUsers = removeDuplicates(state.modifiedUsers);
 		},
+		setSelectedStatus(state, action: PayloadAction<string | null>) {
+			state.selectedStatus = action.payload;
+		},
 
 		clearUsers(state) {
 			state.users = [];
@@ -79,6 +84,7 @@ export const {
 	toggleBlockStatus,
 	clearUsers,
 	setQueriedUsers,
+	setSelectedStatus,
 } = usersSlice.actions;
 
 export default usersSlice.reducer;
