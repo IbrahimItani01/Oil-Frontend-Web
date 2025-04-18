@@ -1,41 +1,44 @@
 "use client";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { syncModifiedUsers } from "@/apis/users.apis";
-import { User } from "../content/users.content";
 
-export const useSyncOnPageUnload = (modifiedUsers: User[]) => {
+export const useSyncOnPageUnload = <T>(
+	source: string,
+	modifiedData: T[],
+	syncFn?: (data: T[]) => void
+) => {
 	useEffect(() => {
 		const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-			if (modifiedUsers.length > 0) {
-				// TODO: Uncomment below when API linked
-				// syncModifiedUsers(modifiedUsers);
-				localStorage.setItem(
-					"Users modified synced upon refresh",
-					JSON.stringify(modifiedUsers)
-				);
+			if (modifiedData.length > 0) {
+				if (syncFn) {
+					// syncFn(modifiedData);
+				} else {
+					// fallback: log to localStorage
+					localStorage.setItem(`${source}-data`, JSON.stringify(modifiedData));
+				}
 			}
 		};
 
-		// Listen to page unload
 		window.addEventListener("beforeunload", handleBeforeUnload);
-
 		return () => {
 			window.removeEventListener("beforeunload", handleBeforeUnload);
 		};
-	}, [modifiedUsers]);
+	}, [modifiedData, syncFn]);
 };
+
 // Import sync function
 
-export const useSyncOnRouteChange = (modifiedUsers: User[]) => {
+export const useSyncOnRouteChange = <T>(
+	modifiedData: T[],
+	watchedPath: string,
+	syncFn?: (data: T[]) => void
+) => {
 	const pathname = usePathname();
 
 	useEffect(() => {
-		// Only trigger sync if the current pathname is '/dashboard/users' and it changes
-		if (pathname !== "/dashboard/users" && modifiedUsers.length > 0) {
-			// TODO: Uncomment below when API linked
-			// syncModifiedUsers(modifiedUsers);
-			console.log("Users Data synced on path change");
+		if (pathname !== watchedPath && modifiedData.length > 0 && syncFn) {
+			// syncFn(modifiedData);
+			console.log(`Data synced on route change from ${watchedPath}`);
 		}
-	}, [modifiedUsers, pathname]); // Trigger on modifiedUsers or pathname change
+	}, [modifiedData, pathname, watchedPath, syncFn]);
 };
