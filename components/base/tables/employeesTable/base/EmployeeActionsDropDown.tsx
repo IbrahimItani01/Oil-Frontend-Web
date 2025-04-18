@@ -10,9 +10,20 @@ import { Action, employeesActions } from "@/lib/content/employees.content";
 import { MoreHorizontal } from "lucide-react";
 import React from "react";
 import { EmployeeCellProps } from "./EmployeeNameCell";
+import { useDispatch } from "react-redux";
+import { toggleActiveStatus } from "@/store/slices/employees.slice";
 
 const EmployeeActionsDropDown = ({ employee }: EmployeeCellProps) => {
+	const dispatch = useDispatch();
+
 	const handleDropDownAction = (action: Action) => {
+		if (action.id === "activate" || action.id === "deactivate") {
+			dispatch(toggleActiveStatus(employee.id));
+		} else if (action.id === "cashOut") {
+			// TODO: complete the cashout logic
+		}
+	};
+	const renderDropDown = (action: Action) => {
 		const Icon = action.icon;
 		if (
 			(employee.status === "inactive" && action.id === "deactivate") ||
@@ -23,12 +34,16 @@ const EmployeeActionsDropDown = ({ employee }: EmployeeCellProps) => {
 		return (
 			<DropdownMenuItem
 				key={action.id}
-				onClick={() => {}}
+				onClick={() => handleDropDownAction(action)}
 				className='cursor-pointer'
 			>
 				<div
 					className={`flex items-center gap-2 ${
-						action.id === "deactivate" ? "text-red-500" : action.id === "activate"? "text-green-800": ""
+						action.id === "deactivate"
+							? "text-red-500"
+							: action.id === "activate"
+							? "text-green-800"
+							: ""
 					}`}
 				>
 					<Icon
@@ -53,7 +68,7 @@ const EmployeeActionsDropDown = ({ employee }: EmployeeCellProps) => {
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align='end'>
-					{employeesActions.map((action) => handleDropDownAction(action))}
+					{employeesActions.map((action) => renderDropDown(action))}
 				</DropdownMenuContent>
 			</DropdownMenu>
 		</TableCell>

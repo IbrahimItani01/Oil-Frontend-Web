@@ -10,12 +10,13 @@ export const useSyncOnPageUnload = <T>(
 	useEffect(() => {
 		const handleBeforeUnload = (e: BeforeUnloadEvent) => {
 			if (modifiedData.length > 0) {
-				if (syncFn) {
-					// syncFn(modifiedData);
-				} else {
-					// fallback: log to localStorage
-					localStorage.setItem(`${source}-data`, JSON.stringify(modifiedData));
-				}
+				// if (syncFn) {
+				// 	syncFn(modifiedData);
+				// } else {
+				// 	// fallback: log to localStorage
+				// 	localStorage.setItem(`${source}-data`, JSON.stringify(modifiedData));
+				// }
+				localStorage.setItem(`${source}-data`, JSON.stringify(modifiedData));
 			}
 		};
 
