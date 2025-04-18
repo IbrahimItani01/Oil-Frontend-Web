@@ -7,6 +7,7 @@ import {
 	SidebarGroupContent,
 	SidebarHeader,
 	SidebarMenu,
+	SidebarSeparator,
 } from "@/components/ui/sidebar";
 import UserProfileHeader from "./sidebar/UserProfileHeader";
 import Footer from "./sidebar/Footer";
@@ -15,13 +16,12 @@ import SidebarItems from "./sidebar/SidebarItems";
 const AppSidebar = () => {
 	return (
 		<Sidebar
-			variant='floating'
 			collapsible='icon'
+			variant='floating'
 		>
-			<SidebarHeader className='mb-8'>
+			<SidebarHeader className='mb-7'>
 				<UserProfileHeader />
 			</SidebarHeader>
-
 			{/* Content */}
 			<SidebarContent>
 				<SidebarGroup>

@@ -1,5 +1,5 @@
 "use client";
-import EmployeesTable from "@/components/base/tables/EmployeesTable";
+import EmployeesTable from "@/components/base/tables/employeesTable/EmployeesTable";
 
 const EmployeesPage = () => {
 	return <EmployeesTable />;

@@ -48,7 +48,7 @@ const HeaderSearchBar = ({
 	if (pathname === "/dashboard") return null;
 
 	return (
-		<div className='relative w-[100%] max-w-[350px] min-w-[180px]'>
+		<div className='relative w-[100%] max-w-[350px] min-w-[200px]'>
 			<Search className='absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground' />
 			<Input
 				type='search'
