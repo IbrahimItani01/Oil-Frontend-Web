@@ -15,3 +15,16 @@ export const syncModifiedUsers = async (modifiedUsers: User[]) => {
 		}
 	}
 };
+
+export const fetchUsers = async (): Promise<User[]> => {
+	try {
+		// Replace with actual API call in future
+		// const response = await axios.get("/api/users");
+		// return response.data;
+
+		return [];
+	} catch (error) {
+		console.error("Failed to fetch users:", error);
+		return [];
+	}
+};

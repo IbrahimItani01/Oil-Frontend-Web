@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter from next/navigation
+import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/store";
 import { setUsers } from "@/store/slices/users.slice";
 import { setEmployees } from "@/store/slices/employees.slice";
@@ -10,6 +10,7 @@ import {
 	useSyncOnPageUnload,
 	useSyncOnRouteChange,
 } from "./handlers/usersData.handlers";
+import { fetchUsers } from "@/apis/users.apis";
 
 const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 	const dispatch = useAppDispatch();
@@ -19,13 +20,19 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 	useEffect(() => {
 		const token = localStorage.getItem("token");
 
-		if (token) {
-			dispatch(setUsers(usersData));
-			dispatch(setEmployees(employeesData));
-			router.push("/dashboard");
-		} else {
-			router.push("/auth");
-		}
+		const initializeData = async () => {
+			if (token) {
+				const apiUsers = await fetchUsers();
+				dispatch(setUsers(apiUsers.length ? apiUsers : usersData));
+
+				dispatch(setEmployees(employeesData));
+				router.push("/dashboard");
+			} else {
+				router.push("/auth");
+			}
+		};
+
+		initializeData();
 	}, [dispatch, router]);
 
 	useSyncOnPageUnload(modifiedUsers);
