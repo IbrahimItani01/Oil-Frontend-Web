@@ -8,15 +8,17 @@ import {
 import { TableCell } from "@/components/ui/table";
 import { MoreHorizontal, Trash2 } from "lucide-react";
 import React from "react";
-import ConfirmModal from "../ConfirmModal";
 import { UserCellProps } from "./UserNameCell";
-import { Action, usersActions } from "@/lib/content/users.content";
+import { usersActions } from "@/lib/content/users.content";
+import { useDispatch } from "react-redux";
+import { toggleBlockStatus } from "@/store/slices/users.slice";
 
-interface UserActionProp extends UserCellProps {
-	userActions: Action[];
-}
+const UserActionDropdown = ({ user }: UserCellProps) => {
+	const dispatch = useDispatch();
 
-const UserActionDropdown = ({ user, userActions }: UserActionProp) => {
+	const handleUserAction = () => {
+		dispatch(toggleBlockStatus(user.id));
+	};
 	return (
 		<>
 			<TableCell className='text-right'>
@@ -31,30 +33,24 @@ const UserActionDropdown = ({ user, userActions }: UserActionProp) => {
 						</Button>
 					</DropdownMenuTrigger>
 					<DropdownMenuContent align='end'>
-						{usersActions.map((action) => (
-							<DropdownMenuItem
-								key={action.id}
-								onClick={() => {
-									// TODO: rehandle the logic
-								}}
-								className='cursor-pointer'
-							>
-								<div className='flex items-center gap-2 text-red-500'>
-									<Trash2 className='h-4 w-4' />
-									<span>{action.label}</span>
-								</div>
-							</DropdownMenuItem>
-						))}
+						<DropdownMenuItem
+							className='cursor-pointer'
+							onClick={handleUserAction}
+						>
+							{user.status === "active" ? (
+								<>
+									<Trash2 className='mr-2 h-4 w-4 text-red-500' />
+									<span className='text-red-500'>
+										{usersActions.find((a) => a.id === "block")?.label}
+									</span>
+								</>
+							) : (
+								usersActions.find((a) => a.id === "unblock")?.label
+							)}
+						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
 			</TableCell>
-			{/* TODO: Re-check the modal for re-structuring */}
-			<ConfirmModal
-				setShowBlockModal={setShowBlockModal}
-				setUserToBlock={setUserToBlock}
-				showBlockModal={showBlockModal}
-				userToBlock={userToBlock}
-			/>
 		</>
 	);
 };

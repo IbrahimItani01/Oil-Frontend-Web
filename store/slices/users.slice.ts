@@ -1,11 +1,9 @@
-// features/users/users.slice.ts
-
 import { User } from "@/lib/content/users.content";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UsersState {
 	users: User[];
-	queriedUsers: User[]; // New state
+	queriedUsers: User[];
 }
 
 const initialState: UsersState = {
@@ -18,7 +16,7 @@ const usersSlice = createSlice({
 	reducers: {
 		setUsers(state, action: PayloadAction<User[]>) {
 			state.users = action.payload;
-			state.queriedUsers = action.payload; // init with same
+			state.queriedUsers = action.payload;
 		},
 		setQueriedUsers(state, action: PayloadAction<User[]>) {
 			state.queriedUsers = action.payload;
@@ -37,12 +35,18 @@ const usersSlice = createSlice({
 		deleteUser(state, action: PayloadAction<string>) {
 			state.users = state.users.filter((user) => user.id !== action.payload);
 		},
-		toggleBlockStatus(state, action: PayloadAction<string>) {
-			const user = state.users.find((u) => u.id === action.payload);
-			if (user) {
-				user.status = user.status === "blocked" ? "active" : "blocked";
-			}
+		toggleBlockStatus: (state, action) => {
+			const updateStatus = (userList: User[]) => {
+				const user = userList.find((u) => u.id === action.payload);
+				if (user) {
+					user.status = user.status === "active" ? "blocked" : "active";
+				}
+			};
+
+			updateStatus(state.users);
+			updateStatus(state.queriedUsers);
 		},
+
 		clearUsers(state) {
 			state.users = [];
 		},
@@ -56,7 +60,7 @@ export const {
 	deleteUser,
 	toggleBlockStatus,
 	clearUsers,
-    setQueriedUsers,
+	setQueriedUsers,
 } = usersSlice.actions;
 
 export default usersSlice.reducer;
