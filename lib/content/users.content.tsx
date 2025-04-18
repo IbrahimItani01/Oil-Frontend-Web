@@ -1,6 +1,8 @@
 // This is a mock of what your content file might look like
 // based on the image provided
 
+import { LucideIcon, Trash2, Unlock } from "lucide-react";
+
 interface Column {
 	id: string;
 	label: string;
@@ -9,6 +11,7 @@ interface Column {
 export interface Action {
 	id: string;
 	label: string;
+	icon: LucideIcon;
 }
 
 export interface User {
@@ -34,10 +37,12 @@ export const usersActions: Action[] = [
 	{
 		id: "block",
 		label: "Block User",
+		icon: Trash2
 	},
 	{
 		id: "unblock",
 		label: "Unblock User",
+		icon: Unlock
 	},
 ];
 

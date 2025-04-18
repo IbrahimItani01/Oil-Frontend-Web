@@ -37,16 +37,28 @@ const UserActionDropdown = ({ user }: UserCellProps) => {
 							className='cursor-pointer'
 							onClick={handleUserAction}
 						>
-							{user.status === "active" ? (
-								<>
-									<Trash2 className='mr-2 h-4 w-4 text-red-500' />
-									<span className='text-red-500'>
-										{usersActions.find((a) => a.id === "block")?.label}
-									</span>
-								</>
-							) : (
-								usersActions.find((a) => a.id === "unblock")?.label
-							)}
+							{usersActions.map((action, k) => {
+								// Check if the action corresponds to the current user status
+								if (
+									(user.status === "active" && action.id === "block") ||
+									(user.status === "blocked" && action.id === "unblock")
+								) {
+									// Dynamically render the icon based on action
+									const Icon = action.icon;
+									const iconClass =
+										user.status === "active"
+											? "text-red-500"
+											: "text-green-500"; // Update based on user status
+
+									return (
+										<span className="flex items-center" key={k}>
+											<Icon className={`mr-2 h-4 w-4 ${iconClass}`} />
+											<span className={iconClass}>{action.label}</span>
+										</span>
+									);
+								}
+								return null;
+							})}
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>
