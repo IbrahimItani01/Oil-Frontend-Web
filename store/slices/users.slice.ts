@@ -1,14 +1,26 @@
 import { User } from "@/lib/content/users.content";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+const removeDuplicates = (modifiedUsers: User[]) => {
+	const uniqueUsersMap = new Map();
+
+	modifiedUsers.forEach((user) => {
+		uniqueUsersMap.set(user.id, user);
+	});
+
+	return Array.from(uniqueUsersMap.values());
+};
+
 interface UsersState {
 	users: User[];
 	queriedUsers: User[];
+	modifiedUsers: User[];
 }
 
 const initialState: UsersState = {
 	users: [],
 	queriedUsers: [],
+	modifiedUsers: [],
 };
 const usersSlice = createSlice({
 	name: "users",
@@ -39,12 +51,18 @@ const usersSlice = createSlice({
 			const updateStatus = (userList: User[]) => {
 				const user = userList.find((u) => u.id === action.payload);
 				if (user) {
+					const previousStatus = user.status;
 					user.status = user.status === "active" ? "blocked" : "active";
+
+					if (user.status !== previousStatus) {
+						state.modifiedUsers.push(user);
+					}
 				}
 			};
 
 			updateStatus(state.users);
 			updateStatus(state.queriedUsers);
+			state.modifiedUsers = removeDuplicates(state.modifiedUsers);
 		},
 
 		clearUsers(state) {
