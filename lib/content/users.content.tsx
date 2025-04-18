@@ -6,10 +6,9 @@ interface Column {
 	label: string;
 }
 
-interface Action {
+export interface Action {
 	id: string;
 	label: string;
-	onClick: (userId: string) => void;
 }
 
 export interface User {
@@ -34,10 +33,11 @@ export const usersColumns: Column[] = [
 export const usersActions: Action[] = [
 	{
 		id: "block",
-		label: "Block/Un-block User",
-		onClick: (userPhone: string) => {
-			console.log(`Block user with ID: ${userPhone}`);
-		},
+		label: "Block User",
+	},
+	{
+		id: "unblock",
+		label: "Unblock User",
 	},
 ];
 
