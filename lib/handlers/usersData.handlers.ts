@@ -8,15 +8,35 @@ export const useSyncOnPageUnload = <T>(
 	syncFn?: (data: T[]) => void
 ) => {
 	useEffect(() => {
-		const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-			if (modifiedData.length > 0) {
-				// if (syncFn) {
-				// 	syncFn(modifiedData);
-				// } else {
-				// 	// fallback: log to localStorage
-				// 	localStorage.setItem(`${source}-data`, JSON.stringify(modifiedData));
-				// }
-				localStorage.setItem(`${source}-data`, JSON.stringify(modifiedData));
+		const handleBeforeUnload = () => {
+			if (modifiedData.length === 0) return;
+
+			localStorage.setItem("hasSynced", "true");
+
+			const payload = JSON.stringify(modifiedData);
+			const endpoint = `/api/sync/${source}`; // TODO: adjust to match your backend
+
+			try {
+				const success = navigator.sendBeacon(
+					endpoint,
+					new Blob([payload], { type: "application/json" })
+				);
+
+				if (!success) {
+					console.warn("sendBeacon failed, falling back...");
+					fallback();
+				}
+			} catch (err) {
+				console.error("Beacon sync error:", err);
+				fallback();
+			}
+
+			function fallback() {
+				if (syncFn) {
+					syncFn(modifiedData);
+				} else {
+					localStorage.setItem(`${source}-data`, payload);
+				}
 			}
 		};
 
@@ -24,7 +44,7 @@ export const useSyncOnPageUnload = <T>(
 		return () => {
 			window.removeEventListener("beforeunload", handleBeforeUnload);
 		};
-	}, [modifiedData, syncFn]);
+	}, [modifiedData, syncFn, source]);
 };
 
 // Import sync function
@@ -37,9 +57,12 @@ export const useSyncOnRouteChange = <T>(
 	const pathname = usePathname();
 
 	useEffect(() => {
-		if (pathname !== watchedPath && modifiedData.length > 0 && syncFn) {
-			// syncFn(modifiedData);
-			console.log(`Data synced on route change from ${watchedPath}`);
+		const hasLeftWatchedPath =
+			modifiedData.length > 0 && pathname !== watchedPath;
+
+		if (hasLeftWatchedPath && syncFn) {
+			console.log(`Syncing on route change from ${watchedPath}`);
+			syncFn(modifiedData);
 		}
 	}, [modifiedData, pathname, watchedPath, syncFn]);
 };

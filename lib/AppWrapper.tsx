@@ -23,37 +23,55 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
+		const hasSynced = localStorage.getItem("hasSynced");
 
 		const initializeData = async () => {
-			if (token) {
-				const apiUsers = await fetchUsers();
-				const apiEmployees = await fetchEmployees();
-				dispatch(setUsers(apiUsers.length ? apiUsers : usersData));
-				dispatch(
-					setEmployees(apiEmployees.length ? apiEmployees : employeesData)
-				);
-				router.push("/dashboard");
-			} else {
+			if (!token) {
 				router.push("/auth");
+				return;
 			}
+
+			if (!hasSynced) {
+				// Only fetch data if not already synced on unload
+				try {
+					const apiUsers = await fetchUsers();
+					const apiEmployees = await fetchEmployees();
+
+					dispatch(setUsers(apiUsers.length ? apiUsers : usersData));
+					dispatch(
+						setEmployees(apiEmployees.length ? apiEmployees : employeesData)
+					);
+				} catch (error) {
+					console.error("Failed to fetch data:", error);
+					router.push("/error-found")
+				}
+			}
+
+			// Clear sync flag after reload
+			localStorage.removeItem("hasSynced");
+
+			router.push("/dashboard");
 		};
 
 		initializeData();
 	}, [dispatch, router]);
 
-	// Define sync functions
+	// Sync functions to send modified data
 	const syncModifiedUsers = (data: User[]) => {
-		console.log("Syncing modified users on route change", data);
+		console.log("Syncing modified users", data);
+		// TODO: Call your backend API here
 	};
 
 	const syncModifiedEmployees = (data: Employee[]) => {
-		console.log("Syncing modified employees on route change", data);
+		console.log("Syncing modified employees", data);
+		// TODO: Call your backend API here
 	};
 
-	// Handle unload and route change
+	// Sync on unload
 	useSyncOnPageUnload("users", modifiedUsers, syncModifiedUsers);
 	useSyncOnPageUnload("employees", modifiedEmployees, syncModifiedEmployees);
 
+	// Sync on route change
 	useSyncOnRouteChange(modifiedUsers, "/dashboard/users", syncModifiedUsers);
 	useSyncOnRouteChange(
 		modifiedEmployees,
