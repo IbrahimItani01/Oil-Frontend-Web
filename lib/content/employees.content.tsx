@@ -37,6 +37,7 @@ import {
 	ShieldMinus,
 	ShieldPlus,
 } from "lucide-react";
+import { Filter } from "./users.content";
 
 export const employeesActions: Action[] = [
 	{
@@ -58,7 +59,20 @@ export const employeesActions: Action[] = [
 		color: "red",
 	},
 ];
-
+export const employeesFilter: Filter[] = [
+	{
+		value: "all",
+		label: "All",
+	},
+	{
+		value: "active",
+		label: "Active",
+	},
+	{
+		value: "inactive",
+		label: "Inactive",
+	},
+];
 export const employeesData: Employee[] = [
 	{
 		id: "#EMP001",
@@ -83,6 +97,36 @@ export const employeesData: Employee[] = [
 	{
 		id: "#EMP003",
 		name: "Maya Chamoun",
+		avatar: "/placeholder.svg",
+		phoneNumber: "+961 000 000 244",
+		balance: 75,
+		nextAppointment: null,
+		status: "inactive",
+		availability: null,
+	},
+	{
+		id: "#EMP004",
+		name: "John Haddad",
+		avatar: "/placeholder.svg",
+		phoneNumber: "+961 000 000 242",
+		balance: 150.5,
+		nextAppointment: "Thursday 21, 4 5:00 PM",
+		status: "inactive",
+		availability: null,
+	},
+	{
+		id: "#EMP005",
+		name: "Bob Nassar",
+		avatar: "/placeholder.svg",
+		phoneNumber: "+961 000 000 243",
+		balance: 320,
+		nextAppointment: "Thursday 21, 4 5:00 PM",
+		status: "active",
+		availability: "busy",
+	},
+	{
+		id: "#EMP006",
+		name: "Sarah Chamoun",
 		avatar: "/placeholder.svg",
 		phoneNumber: "+961 000 000 244",
 		balance: 75,

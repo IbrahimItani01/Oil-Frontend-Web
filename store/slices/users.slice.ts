@@ -66,7 +66,7 @@ const usersSlice = createSlice({
 			updateStatus(state.queriedUsers);
 			state.modifiedUsers = removeDuplicates(state.modifiedUsers);
 		},
-		setSelectedStatus(state, action: PayloadAction<string | null>) {
+		setSelectedUserStatus(state, action: PayloadAction<string | null>) {
 			state.selectedStatus = action.payload;
 		},
 
@@ -84,7 +84,7 @@ export const {
 	toggleBlockStatus,
 	clearUsers,
 	setQueriedUsers,
-	setSelectedStatus,
+	setSelectedUserStatus,
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

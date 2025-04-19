@@ -85,7 +85,7 @@ const EmployeesSlice = createSlice({
 			updateStatus(state.queriedEmployees);
 			state.modifiedEmployees = removeDuplicates(state.modifiedEmployees);
 		},
-		setSelectedStatus(state, action: PayloadAction<string | null>) {
+		setSelectedEmployeeStatus(state, action: PayloadAction<string | null>) {
 			state.selectedStatus = action.payload;
 		},
 		clearEmployees(state) {
@@ -102,7 +102,7 @@ export const {
 	cashOutEmployee,
 	clearEmployees,
 	setQueriedEmployees,
-	setSelectedStatus,
+	setSelectedEmployeeStatus,
 	toggleActiveStatus,
 } = EmployeesSlice.actions;
 
