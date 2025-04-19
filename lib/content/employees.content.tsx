@@ -59,6 +59,8 @@ export const employeesActions: Action[] = [
 		color: "red",
 	},
 ];
+export const employeesFilterDefault = "all";
+
 export const employeesFilter: Filter[] = [
 	{
 		value: "all",
