@@ -13,9 +13,11 @@ const EmployeeNameCell = ({ employee }: EmployeeCellProps) => {
 			<div className='flex items-center gap-2'>
 				<Avatar className='h-8 w-8'>
 					<AvatarImage
-						src={employee.avatar || "/placeholder.svg"}
+						src={employee.photo}
 						alt={employee.name}
+						className='object-cover w-full h-full rounded-full'
 					/>
+
 					<AvatarFallback>{employee.name.charAt(0)}</AvatarFallback>
 				</Avatar>
 				<span>{employee.name}</span>

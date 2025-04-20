@@ -1,3 +1,5 @@
+import { HandCoins, LucideIcon, ShieldMinus, ShieldPlus } from "lucide-react";
+import { Filter } from "./users.content";
 interface Column {
 	id: string;
 	label: string;
@@ -13,12 +15,12 @@ export interface Action {
 export interface Employee {
 	id: string;
 	name: string;
-	avatar: string;
 	phoneNumber: string;
 	balance: number;
 	nextAppointment: string | null;
 	status: "active" | "inactive";
 	availability: "available" | "busy" | null;
+	photo: string;
 }
 
 export const employeesColumns: Column[] = [
@@ -29,15 +31,6 @@ export const employeesColumns: Column[] = [
 	{ id: "nextAppointment", label: "Next Appointment" },
 	{ id: "availability", label: "Availability" },
 ];
-
-import {
-	Trash2,
-	HandCoins,
-	LucideIcon,
-	ShieldMinus,
-	ShieldPlus,
-} from "lucide-react";
-import { Filter } from "./users.content";
 
 export const employeesActions: Action[] = [
 	{
@@ -79,61 +72,51 @@ export const employeesData: Employee[] = [
 	{
 		id: "#EMP001",
 		name: "Lea Haddad",
-		avatar: "/placeholder.svg",
 		phoneNumber: "+961 000 000 242",
 		balance: 110.4,
 		nextAppointment: "Thursday 21, 4 5:00 PM",
 		status: "active",
 		availability: "available",
+		photo: "/static/employeesImages/EMP001-image.jpg",
 	},
 	{
 		id: "#EMP002",
 		name: "Jad Nassar",
-		avatar: "/placeholder.svg",
 		phoneNumber: "+961 000 000 243",
 		balance: 84.6,
 		nextAppointment: "Thursday 21, 4 5:00 PM",
 		status: "active",
 		availability: "busy",
+		photo: "/static/employeesImages/EMP002-image.jpg",
 	},
 	{
 		id: "#EMP003",
 		name: "Maya Chamoun",
-		avatar: "/placeholder.svg",
 		phoneNumber: "+961 000 000 244",
 		balance: 0,
 		nextAppointment: null,
 		status: "inactive",
 		availability: null,
+		photo: "/static/employeesImages/EMP003-image.jpg",
 	},
 	{
 		id: "#EMP004",
 		name: "John Haddad",
-		avatar: "/placeholder.svg",
 		phoneNumber: "+961 000 000 242",
 		balance: 110.2,
 		nextAppointment: "Thursday 21, 4 5:00 PM",
 		status: "inactive",
 		availability: null,
+		photo: "/static/employeesImages/EMP004-image.jpg",
 	},
 	{
 		id: "#EMP005",
 		name: "Bob Nassar",
-		avatar: "/placeholder.svg",
 		phoneNumber: "+961 000 000 243",
 		balance: 0,
 		nextAppointment: "Thursday 21, 4 5:00 PM",
 		status: "active",
 		availability: "busy",
-	},
-	{
-		id: "#EMP006",
-		name: "Sarah Chamoun",
-		avatar: "/placeholder.svg",
-		phoneNumber: "+961 000 000 244",
-		balance: 0,
-		nextAppointment: null,
-		status: "inactive",
-		availability: null,
+		photo: "/static/employeesImages/EMP005-image.jpg",
 	},
 ];

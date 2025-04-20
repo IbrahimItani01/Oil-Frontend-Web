@@ -14,8 +14,9 @@ const UserNameCell = ({ user }: UserCellProps) => {
 			<div className='flex items-center gap-2'>
 				<Avatar className='h-8 w-8'>
 					<AvatarImage
-						src={user.avatar || "/placeholder.svg"}
+						src={user.photo}
 						alt={user.name}
+						className='object-cover w-full h-full rounded-full'
 					/>
 					<AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
 				</Avatar>

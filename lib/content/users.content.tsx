@@ -17,11 +17,11 @@ export interface Action {
 export interface User {
 	id: string;
 	name: string;
-	avatar: string;
 	phoneNumber: string;
 	email: string;
 	nextAppointment: string | null;
 	status: "blocked" | "active";
+	photo: string;
 }
 
 export const usersColumns: Column[] = [
@@ -37,12 +37,12 @@ export const usersActions: Action[] = [
 	{
 		id: "block",
 		label: "Block User",
-		icon: Trash2
+		icon: Trash2,
 	},
 	{
 		id: "unblock",
 		label: "Unblock User",
-		icon: Unlock
+		icon: Unlock,
 	},
 ];
 
@@ -71,64 +71,64 @@ export const usersData: User[] = [
 	{
 		id: "#CM9801",
 		name: "Natali Craig",
-		avatar: "/placeholder.svg?height=32&width=32",
 		phoneNumber: "+961 3 123 456",
 		email: "natali@gmail.com",
 		nextAppointment: null,
 		status: "blocked",
+		photo: "/static/usersImages/CM9801-image.jpg",
 	},
 	{
 		id: "#CM9802",
 		name: "Kate Morrison",
-		avatar: "/placeholder.svg?height=32&width=32",
 		phoneNumber: "+961 3 123 457",
 		email: "kate@gmail.com",
 		nextAppointment: null,
 		status: "active",
+		photo: "/static/usersImages/CM9802-image.jpg",
 	},
 	{
 		id: "#CM9803",
 		name: "Drew Cano",
-		avatar: "/placeholder.svg?height=32&width=32",
 		phoneNumber: "+961 3 123 458",
 		email: "drew@gmail.com",
 		nextAppointment: "Tomorrow 4:00 PM",
 		status: "active",
+		photo: "/static/usersImages/CM9803-image.jpg",
 	},
 	{
 		id: "#CM9804",
 		name: "Orlando Diggs",
-		avatar: "/placeholder.svg?height=32&width=32",
 		phoneNumber: "+961 3 123 459",
 		email: "orlando@gmail.com",
 		nextAppointment: "Thursday 21, 4 5:00 PM",
 		status: "active",
+		photo: "/static/usersImages/CM9804-image.jpg",
 	},
 	{
 		id: "#CM9805",
 		name: "Andi Lane",
-		avatar: "/placeholder.svg?height=32&width=32",
 		phoneNumber: "+961 3 123 434",
 		email: "andi@gmail.com",
 		nextAppointment: null,
 		status: "active",
+		photo: "/static/usersImages/CM9805-image.jpg",
 	},
 	{
 		id: "#CM9806",
 		name: "John Doe",
-		avatar: "/placeholder.svg?height=32&width=32",
 		phoneNumber: "+961 3 123 456",
 		email: "john@gmail.com",
 		nextAppointment: null,
 		status: "blocked",
+		photo: "/static/usersImages/CM9806-image.jpg",
 	},
 	{
 		id: "#CM9807",
 		name: "Nabiha Nabiha",
-		avatar: "/placeholder.svg?height=32&width=32",
 		phoneNumber: "+961 3 123 456",
 		email: "nabiha@gmail.com",
 		nextAppointment: null,
 		status: "blocked",
+		photo: "/static/usersImages/CM9807-image.jpg",
 	},
 ];
