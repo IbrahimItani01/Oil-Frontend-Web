@@ -29,10 +29,10 @@ const EmployeeActionsDropDown = ({ employee }: EmployeeCellProps) => {
 		const Icon = action.icon;
 		if (
 			(employee.status === "inactive" && action.id === "deactivate") ||
-			(employee.status === "active" && action.id === "activate")
+			(employee.status === "active" && action.id === "activate") || (action.id==="cashOut" && employee.status==="inactive") || (employee.balance === 0 && action.id==="cashOut")
 		)
 			return null;
-
+		
 		return (
 			<DropdownMenuItem
 				key={action.id}
