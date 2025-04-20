@@ -72,7 +72,7 @@ export const employeesData: Employee[] = [
 	{
 		id: "#EMP001",
 		name: "Lea Haddad",
-		phoneNumber: "+961 000 000 242",
+		phoneNumber: "+9613323456",
 		balance: 110.4,
 		nextAppointment: "Thursday 21, 4 5:00 PM",
 		status: "active",
@@ -82,7 +82,7 @@ export const employeesData: Employee[] = [
 	{
 		id: "#EMP002",
 		name: "Jad Nassar",
-		phoneNumber: "+961 000 000 243",
+		phoneNumber: "+9613123451",
 		balance: 84.6,
 		nextAppointment: "Thursday 21, 4 5:00 PM",
 		status: "active",
@@ -92,7 +92,7 @@ export const employeesData: Employee[] = [
 	{
 		id: "#EMP003",
 		name: "Maya Chamoun",
-		phoneNumber: "+961 000 000 244",
+		phoneNumber: "+9613123450",
 		balance: 0,
 		nextAppointment: null,
 		status: "inactive",
@@ -102,7 +102,7 @@ export const employeesData: Employee[] = [
 	{
 		id: "#EMP004",
 		name: "John Haddad",
-		phoneNumber: "+961 000 000 242",
+		phoneNumber: "+9613123452",
 		balance: 110.2,
 		nextAppointment: "Thursday 21, 4 5:00 PM",
 		status: "inactive",
@@ -112,7 +112,7 @@ export const employeesData: Employee[] = [
 	{
 		id: "#EMP005",
 		name: "Bob Nassar",
-		phoneNumber: "+961 000 000 243",
+		phoneNumber: "+9613123453",
 		balance: 0,
 		nextAppointment: "Thursday 21, 4 5:00 PM",
 		status: "active",

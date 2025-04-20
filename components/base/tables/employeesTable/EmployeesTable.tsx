@@ -7,6 +7,7 @@ import EmployeeNameCell from "./base/EmployeeNameCell";
 import EmployeeNextAppointmentCell from "./base/EmployeeNextAppointmentCell";
 import EmployeeAvailabilityCell from "./base/EmployeeAvailabilityCell";
 import EmployeeActionsDropDown from "./base/EmployeeActionsDropDown";
+import { formatPhoneNumber } from "@/lib/utils/formatting";
 
 const employeesTable = () => {
 	const employees = useAppSelector((state) => state.employees.queriedEmployees);
@@ -19,11 +20,11 @@ const employeesTable = () => {
 					{employees.map((employee) => (
 						<TableRow
 							key={employee.id}
-							className={employee.status==="inactive"? "opacity-60" : ""}
+							className={employee.status === "inactive" ? "opacity-60" : ""}
 						>
 							<TableCell className='font-medium'>{employee.id}</TableCell>
 							<EmployeeNameCell employee={employee} />
-							<TableCell>{employee.phoneNumber}</TableCell>
+							<TableCell>{formatPhoneNumber(employee.phoneNumber)}</TableCell>
 							<TableCell>{employee.balance}</TableCell>
 							<EmployeeNextAppointmentCell employee={employee} />
 							<EmployeeAvailabilityCell employee={employee} />

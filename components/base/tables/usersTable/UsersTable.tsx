@@ -7,9 +7,12 @@ import UserNameCell from "./base/UserNameCell";
 import UserNextAppointment from "./base/UserNextAppointment";
 import UserStatusCell from "./base/UserStatusCell";
 import UserActionDropdown from "./base/UserActionDropdown";
+import { formatPhoneNumber } from "@/lib/utils/formatting";
 
 const UsersTable = () => {
 	const users = useAppSelector((state) => state.users.queriedUsers);
+
+	
 
 	return (
 		<div className='w-full relative'>
@@ -20,7 +23,7 @@ const UsersTable = () => {
 						<TableRow key={user.id}>
 							<TableCell className='font-medium'>{user.id}</TableCell>
 							<UserNameCell user={user} />
-							<TableCell>{user.phoneNumber}</TableCell>
+							<TableCell>{formatPhoneNumber(user.phoneNumber)}</TableCell>
 							<TableCell>{user.email}</TableCell>
 							<UserNextAppointment user={user} />
 							<UserStatusCell user={user} />

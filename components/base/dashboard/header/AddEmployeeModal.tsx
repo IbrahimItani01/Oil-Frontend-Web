@@ -1,19 +1,21 @@
 "use client";
 
 import type React from "react";
-
 import { useState, useRef, type ChangeEvent, type FormEvent } from "react";
-import { Button } from "@/components/ui/button";
+import { useDispatch } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
+
 import {
 	Dialog,
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
-	DialogFooter,
 } from "@/components/ui/dialog";
 import ImagePreview from "./EmployeeModal/ImagePreview";
 import FormInput from "./EmployeeModal/FormInput";
 import ModalFooter from "./EmployeeModal/ModalFooter";
+import { Employee } from "@/lib/content/employees.content";
+import { addEmployee } from "@/store/slices/employees.slice";
 
 interface EmployeeFormData {
 	name: string;
@@ -37,6 +39,7 @@ const EmployeeModal = ({ open, onOpenChange }: EmployeeModalProps) => {
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const [isDragging, setIsDragging] = useState(false);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+	const dispatch = useDispatch();
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -68,7 +71,6 @@ const EmployeeModal = ({ open, onOpenChange }: EmployeeModalProps) => {
 	const handleDrop = (e: React.DragEvent) => {
 		e.preventDefault();
 		setIsDragging(false);
-
 		const file = e.dataTransfer.files?.[0];
 		if (file) {
 			setFormData((prev) => ({ ...prev, image: file }));
@@ -80,12 +82,48 @@ const EmployeeModal = ({ open, onOpenChange }: EmployeeModalProps) => {
 		}
 	};
 
-	const handleSubmit = (e: FormEvent) => {
+	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 
-		// Call the onSubmit callback with the form data
+		const id = uuidv4().slice(0, 3); // Short unique ID like "013"
+		let photoFilename = "";
+		let uploadedImagePath;
+		if (formData.image) {
+			const extension = formData.image.name.split(".").pop();
+			photoFilename = `${id}-image.${extension}`;
 
-		// Close the modal and reset the form
+			// Create FormData for image upload
+			const imageForm = new FormData();
+			imageForm.append("image", formData.image, photoFilename);
+
+			// Upload the image
+			// const response = await fetch("/api/upload/employee-image", {
+			// 	method: "POST",
+			// 	body: imageForm,
+			// });
+
+			// if (!response.ok) {
+			// 	console.error("Image upload failed");
+			// 	return;
+			// }
+
+			// Assuming the image upload returns the path to the uploaded image
+			uploadedImagePath = `/static/employeesImages/${photoFilename}`;
+		}
+
+		// Prepare the new employee object
+		const newEmployee: Employee = {
+			id,
+			name: formData.name,
+			phoneNumber: formData.phoneNumber,
+			balance: 0,
+			nextAppointment: null,
+			status: "inactive",
+			availability: null,
+			photo: uploadedImagePath ? uploadedImagePath : "", // Use the uploaded image path here
+		};
+
+		dispatch(addEmployee(newEmployee));
 		onOpenChange(false);
 		resetForm();
 	};
@@ -126,8 +164,9 @@ const EmployeeModal = ({ open, onOpenChange }: EmployeeModalProps) => {
 						handleDrop={handleDrop}
 						handleImageUpload={handleImageUpload}
 						imagePreview={imagePreview}
-						isDragging
+						isDragging={isDragging}
 					/>
+
 					<div className='space-y-4'>
 						<FormInput
 							id='name'
@@ -137,14 +176,15 @@ const EmployeeModal = ({ open, onOpenChange }: EmployeeModalProps) => {
 							placeholder='John Doe'
 							required
 						/>
-
 						<FormInput
 							id='phoneNumber'
 							name='Phone Number'
+							type='tel'
 							value={formData.phoneNumber}
 							onChange={handleInputChange}
 							placeholder='+961'
 							required
+							isPhoneInput
 						/>
 
 						<FormInput
