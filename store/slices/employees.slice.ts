@@ -51,12 +51,6 @@ const EmployeesSlice = createSlice({
 			state.employees = state.employees.filter((e) => e.id !== action.payload);
 		},
 
-		cashOutEmployee(state, action: PayloadAction<string>) {
-			const employee = state.employees.find((e) => e.id === action.payload);
-			if (employee) {
-				employee.balance = 0;
-			}
-		},
 		toggleActiveStatus: (state, action) => {
 			const updateStatus = (employeesList: Employee[]) => {
 				const employee = employeesList.find((u) => u.id === action.payload);
@@ -85,6 +79,18 @@ const EmployeesSlice = createSlice({
 			updateStatus(state.queriedEmployees);
 			state.modifiedEmployees = removeDuplicates(state.modifiedEmployees);
 		},
+		updateEmployeeBalance(
+			state,
+			action: PayloadAction<{ employeeId: string; amount: number }>
+		) {
+			const { employeeId, amount } = action.payload;
+			const employee = state.employees.find((e) => e.id === employeeId);
+			if (employee) {
+				// Round up to the nearest one decimal point
+				const newBalance = (employee.balance || 0) - amount;
+				employee.balance = Math.ceil(newBalance * 10) / 10; // Round to 1 decimal place
+			}
+		},
 		setSelectedEmployeeStatus(state, action: PayloadAction<string | null>) {
 			state.selectedStatus = action.payload;
 		},
@@ -99,11 +105,11 @@ export const {
 	addEmployee,
 	updateEmployee,
 	deleteEmployee,
-	cashOutEmployee,
 	clearEmployees,
 	setQueriedEmployees,
 	setSelectedEmployeeStatus,
 	toggleActiveStatus,
+	updateEmployeeBalance,
 } = EmployeesSlice.actions;
 
 export default EmployeesSlice.reducer;

@@ -12,6 +12,9 @@ import {
 } from "./handlers/usersData.handlers";
 import { fetchUsers } from "@/apis/users.apis";
 import { fetchEmployees } from "@/apis/employees.apis";
+import { fetchOrders } from "@/apis/orders.apis";
+import { setOrders } from "@/store/slices/orders.slice";
+import { ordersData } from "./content/orders.content";
 
 const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 	const dispatch = useAppDispatch();
@@ -36,14 +39,14 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 				try {
 					const apiUsers = await fetchUsers();
 					const apiEmployees = await fetchEmployees();
-
+					const apiOrders = await fetchOrders();
 					dispatch(setUsers(apiUsers.length ? apiUsers : usersData));
 					dispatch(
 						setEmployees(apiEmployees.length ? apiEmployees : employeesData)
 					);
+					dispatch(setOrders(apiOrders.length ? apiOrders : ordersData));
 				} catch (error) {
 					console.error("Failed to fetch data:", error);
-					router.push("/error-found")
 				}
 			}
 

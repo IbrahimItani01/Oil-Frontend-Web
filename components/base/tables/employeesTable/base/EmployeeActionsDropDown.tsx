@@ -8,19 +8,21 @@ import {
 import { TableCell } from "@/components/ui/table";
 import { Action, employeesActions } from "@/lib/content/employees.content";
 import { MoreHorizontal } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { EmployeeCellProps } from "./EmployeeNameCell";
 import { useDispatch } from "react-redux";
 import { toggleActiveStatus } from "@/store/slices/employees.slice";
+import CashOutModal from "../cashout/CashoutModal";
 
 const EmployeeActionsDropDown = ({ employee }: EmployeeCellProps) => {
 	const dispatch = useDispatch();
-
+	const [cashOutOpen, setCashOutOpen] = useState(false);
 	const handleDropDownAction = (action: Action) => {
 		if (action.id === "activate" || action.id === "deactivate") {
 			dispatch(toggleActiveStatus(employee.id));
 		} else if (action.id === "cashOut") {
 			// TODO: complete the cashout logic
+			setCashOutOpen(true);
 		}
 	};
 	const renderDropDown = (action: Action) => {
@@ -71,6 +73,13 @@ const EmployeeActionsDropDown = ({ employee }: EmployeeCellProps) => {
 					{employeesActions.map((action) => renderDropDown(action))}
 				</DropdownMenuContent>
 			</DropdownMenu>
+			{cashOutOpen && (
+				<CashOutModal
+					setCashOutOpen={setCashOutOpen}
+					cashOutOpen={cashOutOpen}
+					employee={employee}
+				/>
+			)}
 		</TableCell>
 	);
 };
