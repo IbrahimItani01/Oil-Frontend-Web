@@ -56,11 +56,11 @@ const FilterTabs = () => {
 
 		return (
 			<Tabs value={userTab}>
-				<TabsList>
+				<TabsList className='bg-gray-100 p-1 rounded-lg'>
 					{usersFilters.map((filter, i) => (
 						<TabsTrigger
 							key={i}
-							className='w-[100px] cursor-pointer'
+							className='min-w-[100px] cursor-pointer transition-all duration-300 ease-in-out data-[state=active]:bg-white data-[state=active]:shadow-sm'
 							value={filter.value}
 							onClick={() => handleUsersFilter(filter.value)}
 						>
@@ -85,11 +85,11 @@ const FilterTabs = () => {
 
 		return (
 			<Tabs value={employeeTab}>
-				<TabsList>
+				<TabsList className='bg-gray-100 p-1 rounded-lg'>
 					{employeesFilter.map((filter, i) => (
 						<TabsTrigger
 							key={i}
-							className='w-[100px] cursor-pointer'
+							className='min-w-[100px]  cursor-pointer transition-all duration-300 ease-in-out data-[state=active]:bg-white data-[state=active]:shadow-sm'
 							value={filter.value}
 							onClick={() => handleEmployeesFilter(filter.value)}
 						>
