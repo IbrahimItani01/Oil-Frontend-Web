@@ -15,6 +15,9 @@ import { fetchEmployees } from "@/apis/employees.apis";
 import { fetchOrders } from "@/apis/orders.apis";
 import { setOrders } from "@/store/slices/orders.slice";
 import { ordersData } from "./content/orders.content";
+import { fetchAppointments } from "@/apis/appointments.apis";
+import { setAppointments } from "@/store/slices/appointments.slice";
+import { Appointment, appointmentsData } from "./content/appointments.content";
 
 const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 	const dispatch = useAppDispatch();
@@ -22,6 +25,9 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 	const modifiedUsers = useAppSelector((state) => state.users.modifiedUsers);
 	const modifiedEmployees = useAppSelector(
 		(state) => state.employees.modifiedEmployees
+	);
+	const modifiedAppointments = useAppSelector(
+		(state) => state.appintments.modifiedAppointments
 	);
 
 	useEffect(() => {
@@ -40,11 +46,17 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 					const apiUsers = await fetchUsers();
 					const apiEmployees = await fetchEmployees();
 					const apiOrders = await fetchOrders();
+					const apiAppointments = await fetchAppointments();
 					dispatch(setUsers(apiUsers.length ? apiUsers : usersData));
 					dispatch(
 						setEmployees(apiEmployees.length ? apiEmployees : employeesData)
 					);
 					dispatch(setOrders(apiOrders.length ? apiOrders : ordersData));
+					dispatch(
+						setAppointments(
+							apiAppointments.length ? apiAppointments : appointmentsData
+						)
+					);
 				} catch (error) {
 					console.error("Failed to fetch data:", error);
 				}
@@ -69,10 +81,18 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		console.log("Syncing modified employees", data);
 		// TODO: Call your backend API here
 	};
-
+	const syncModifiedAppointments = (data: Appointment[]) => {
+		console.log("Syncing modiifed appointments", data);
+		// TODO: Call your backend API here
+	};
 	// Sync on unload
 	useSyncOnPageUnload("users", modifiedUsers, syncModifiedUsers);
 	useSyncOnPageUnload("employees", modifiedEmployees, syncModifiedEmployees);
+	useSyncOnPageUnload(
+		"appointments",
+		modifiedAppointments,
+		syncModifiedAppointments
+	);
 
 	// Sync on route change
 	useSyncOnRouteChange(modifiedUsers, "/dashboard/users", syncModifiedUsers);
@@ -80,6 +100,11 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		modifiedEmployees,
 		"/dashboard/employees",
 		syncModifiedEmployees
+	);
+	useSyncOnRouteChange(
+		modifiedAppointments,
+		"/dashboard/appointments",
+		syncModifiedAppointments
 	);
 
 	return <>{children}</>;
