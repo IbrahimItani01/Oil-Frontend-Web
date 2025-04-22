@@ -1,4 +1,4 @@
-import AppointmentsTable from "@/components/base/tables/AppointmentsTable";
+import AppointmentsTable from "@/components/base/tables/appointmentsTable/AppointmentsTable";
 import React from "react";
 
 const page = () => {
