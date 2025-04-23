@@ -18,6 +18,9 @@ import { ordersData } from "./content/orders.content";
 import { fetchAppointments } from "@/apis/appointments.apis";
 import { setAppointments } from "@/store/slices/appointments.slice";
 import { Appointment, appointmentsData } from "./content/appointments.content";
+import { fetchProducts } from "@/apis/products.apis";
+import { setProducts } from "@/store/slices/products.slice";
+import { Product, productsData } from "./content/products.content";
 
 const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 	const dispatch = useAppDispatch();
@@ -27,7 +30,10 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		(state) => state.employees.modifiedEmployees
 	);
 	const modifiedAppointments = useAppSelector(
-		(state) => state.appintments.modifiedAppointments
+		(state) => state.appointments.modifiedAppointments
+	);
+	const modifiedProducts = useAppSelector(
+		(state) => state.products.modifiedProducts
 	);
 
 	useEffect(() => {
@@ -47,6 +53,7 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 					const apiEmployees = await fetchEmployees();
 					const apiOrders = await fetchOrders();
 					const apiAppointments = await fetchAppointments();
+					const apiProducts = await fetchProducts();
 					dispatch(setUsers(apiUsers.length ? apiUsers : usersData));
 					dispatch(
 						setEmployees(apiEmployees.length ? apiEmployees : employeesData)
@@ -56,6 +63,9 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 						setAppointments(
 							apiAppointments.length ? apiAppointments : appointmentsData
 						)
+					);
+					dispatch(
+						setProducts(apiProducts.length ? apiProducts : productsData)
 					);
 				} catch (error) {
 					console.error("Failed to fetch data:", error);
@@ -85,6 +95,10 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		console.log("Syncing modiifed appointments", data);
 		// TODO: Call your backend API here
 	};
+	const syncModifiedProducts = (data: Product[]) => {
+		console.log("Syncing modiifed products", data);
+		// TODO: Call your backend API here
+	};
 	// Sync on unload
 	useSyncOnPageUnload("users", modifiedUsers, syncModifiedUsers);
 	useSyncOnPageUnload("employees", modifiedEmployees, syncModifiedEmployees);
@@ -93,6 +107,7 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		modifiedAppointments,
 		syncModifiedAppointments
 	);
+	useSyncOnPageUnload("products", modifiedProducts, syncModifiedProducts);
 
 	// Sync on route change
 	useSyncOnRouteChange(modifiedUsers, "/dashboard/users", syncModifiedUsers);
@@ -105,6 +120,11 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		modifiedAppointments,
 		"/dashboard/appointments",
 		syncModifiedAppointments
+	);
+	useSyncOnRouteChange(
+		modifiedProducts,
+		"/dashboard/products",
+		syncModifiedProducts
 	);
 
 	return <>{children}</>;

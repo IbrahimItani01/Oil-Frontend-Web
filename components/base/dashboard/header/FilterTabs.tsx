@@ -10,6 +10,11 @@ import {
 	employeesFilter,
 	employeesFilterDefault,
 } from "@/lib/content/employees.content";
+import {
+	Product,
+	productsFilterDefault,
+	productsFilters,
+} from "@/lib/content/products.content";
 import { usersFilterDefault, usersFilters } from "@/lib/content/users.content";
 import {
 	setQueriedAppointments,
@@ -19,6 +24,10 @@ import {
 	setQueriedEmployees,
 	setSelectedEmployeeStatus,
 } from "@/store/slices/employees.slice";
+import {
+	setQueriedProducts,
+	setSelectedProductStatus,
+} from "@/store/slices/products.slice";
 import {
 	setQueriedUsers,
 	setSelectedUserStatus,
@@ -34,8 +43,9 @@ const FilterTabs = () => {
 	const allUsers = useAppSelector((state) => state.users.users);
 	const allEmployees = useAppSelector((state) => state.employees.employees);
 	const allAppointments = useAppSelector(
-		(state) => state.appintments.appointments
+		(state) => state.appointments.appointments
 	);
+	const allProducts = useAppSelector((state) => state.products.products);
 
 	// Each section gets its own tab state
 	const [userTab, setUserTab] = useState(usersFilterDefault);
@@ -43,6 +53,7 @@ const FilterTabs = () => {
 	const [appointmentTab, setAppointmentTab] = useState(
 		appointmentsFilterDefault
 	);
+	const [productTab, setProductTab] = useState(productsFilterDefault);
 
 	// Reset tabs when switching routes
 	useEffect(() => {
@@ -61,7 +72,19 @@ const FilterTabs = () => {
 			dispatch(setSelectedAppointmentStatus(null));
 			dispatch(setQueriedAppointments(allAppointments));
 		}
-	}, [pathname, dispatch, allUsers, allEmployees]);
+		if (pathname === "/dashboard/products") {
+			setProductTab(productsFilterDefault);
+			dispatch(setSelectedProductStatus(null));
+			dispatch(setQueriedProducts(allProducts));
+		}
+	}, [
+		pathname,
+		dispatch,
+		allUsers,
+		allEmployees,
+		allAppointments,
+		allProducts,
+	]);
 
 	if (pathname === "/dashboard/users") {
 		const handleUsersFilter = (status: string) => {
@@ -152,6 +175,40 @@ const FilterTabs = () => {
 							className='min-w-[100px]  cursor-pointer transition-all duration-300 ease-in-out data-[state=active]:bg-white data-[state=active]:shadow-sm'
 							value={filter.value}
 							onClick={() => handleAppointmentsFilter(filter.value)}
+						>
+							{filter.label}
+						</TabsTrigger>
+					))}
+				</TabsList>
+			</Tabs>
+		);
+	}
+	if (pathname === "/dashboard/products") {
+		const handleProductsFilter = (status: string) => {
+			setProductTab(status);
+			const validStatuses = ["active", "inactive"] as const;
+
+			if (status === "all") {
+				dispatch(setSelectedProductStatus(null));
+			} else if (validStatuses.includes(status as any)) {
+				dispatch(setSelectedProductStatus(status as Product["status"]));
+			}
+			const filtered =
+				status === "all"
+					? allProducts
+					: allProducts.filter((e) => e.status === status);
+			dispatch(setQueriedProducts(filtered));
+		};
+
+		return (
+			<Tabs value={productTab}>
+				<TabsList className='bg-gray-100 p-1 rounded-lg'>
+					{productsFilters.map((filter, i) => (
+						<TabsTrigger
+							key={i}
+							className='min-w-[100px]  cursor-pointer transition-all duration-300 ease-in-out data-[state=active]:bg-white data-[state=active]:shadow-sm'
+							value={filter.value}
+							onClick={() => handleProductsFilter(filter.value)}
 						>
 							{filter.label}
 						</TabsTrigger>

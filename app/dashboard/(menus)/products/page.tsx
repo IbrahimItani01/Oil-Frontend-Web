@@ -1,4 +1,4 @@
-import { ProductsTable } from "@/components/base/dashboard/stats/SalesTable";
+import ProductsTable from "@/components/base/tables/productsTable/ProductsTable";
 import React from "react";
 
 const page = () => {

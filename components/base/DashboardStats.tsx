@@ -1,8 +1,8 @@
 import React from "react";
 import StatCard from "./dashboard/stats/StatCard";
 import { SalesChart } from "./dashboard/stats/SalesChart";
-import { ProductsTable } from "./dashboard/stats/SalesTable";
 import { statsData } from "@/lib/constants/stats.constants";
+import { SalesTable } from "./dashboard/stats/SalesTable";
 
 const DashboardStats = () => {
 	return (
@@ -22,7 +22,7 @@ const DashboardStats = () => {
 				<SalesChart />
 			</div>
 			<div className='grid gap-4 grid-cols-1 md:grid-cols-4'>
-				<ProductsTable />
+				<SalesTable />
 			</div>
 		</div>
 	);

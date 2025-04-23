@@ -14,7 +14,7 @@ import AppointmentModal from "./base/AppointmentModal";
 
 const AppointmentsTable = () => {
 	const appointments = useAppSelector(
-		(state) => state.appintments.queriedAppointments
+		(state) => state.appointments.queriedAppointments
 	);
 
 	return (

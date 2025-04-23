@@ -9,7 +9,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { topProducts } from "@/lib/constants/stats.constants";
 
-export function ProductsTable() {
+export function SalesTable() {
 	return (
 		<Card className='col-span-4'>
 			<CardHeader>
