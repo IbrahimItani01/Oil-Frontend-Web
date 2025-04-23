@@ -166,7 +166,7 @@ const HeaderSearchBar = ({
 			selectedUsersStatus,
 			selectedEmployeesStatus,
 			selectedAppointmentsStatus,
-			setSelectedProductStatus,
+			selectedProductsStatus,
 		]
 	);
 

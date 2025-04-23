@@ -13,7 +13,7 @@ interface ProductsState {
 	products: Product[];
 	queriedProducts: Product[];
 	modifiedProducts: Product[];
-	selectedStatus: string | null;
+	selectedStatus: Product["status"] | null;
 }
 
 const initialState: ProductsState = {
@@ -62,7 +62,10 @@ const ProductsSlice = createSlice({
 			updateStatus(state.queriedProducts);
 			state.modifiedProducts = removeDuplicateProducts(state.modifiedProducts);
 		},
-		setSelectedProductStatus(state, action: PayloadAction<string | null>) {
+		setSelectedProductStatus(
+			state,
+			action: PayloadAction<Product["status"] | null>
+		) {
 			state.selectedStatus = action.payload;
 		},
 		clearProducts(state) {
