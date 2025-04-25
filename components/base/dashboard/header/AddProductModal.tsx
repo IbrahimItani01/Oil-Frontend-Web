@@ -181,6 +181,7 @@ const ProductModal = ({ open, onOpenChange }: AddProductModalProps) => {
 					<ModalFooter
 						onOpenChange={onOpenChange}
 						resetForm={resetForm}
+						isEdit={false}
 					/>
 				</form>
 			</DialogContent>
