@@ -18,6 +18,8 @@ export interface Product {
 	name: string;
 	type: string;
 	amountSold: number;
+	price: number;
+	description: string;
 	status: "active" | "inactive";
 }
 
@@ -70,6 +72,8 @@ export const productsData: Product[] = [
 		type: "Haircare",
 		amountSold: 120,
 		status: "active",
+		description: "lorem",
+		price: 100
 	},
 	{
 		id: "p002",
@@ -78,6 +82,8 @@ export const productsData: Product[] = [
 		type: "Haircare",
 		amountSold: 95,
 		status: "active",
+		description: "lorem",
+		price: 100
 	},
 	{
 		id: "p003",
@@ -86,6 +92,8 @@ export const productsData: Product[] = [
 		type: "Skincare",
 		amountSold: 200,
 		status: "inactive",
+		description: "lorem",
+		price: 100
 	},
 	{
 		id: "p004",
@@ -94,6 +102,8 @@ export const productsData: Product[] = [
 		type: "Skincare",
 		amountSold: 180,
 		status: "active",
+		description: "lorem",
+		price: 100
 	},
 	{
 		id: "p005",
@@ -102,5 +112,7 @@ export const productsData: Product[] = [
 		type: "Haircare",
 		amountSold: 60,
 		status: "inactive",
+		description: "lorem",
+		price: 100
 	},
 ];
