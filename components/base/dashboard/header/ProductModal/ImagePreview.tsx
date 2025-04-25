@@ -1,72 +1,65 @@
 import { Button } from "@/components/ui/button";
-import React from "react";
+import React, { ChangeEvent } from "react";
 
-interface ImagePreviewProps {
-	handleDrop: (e: React.DragEvent<HTMLDivElement>) => void;
-	handleDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
+interface ImagePreview {
+	isDragging: boolean;
+	handleDragOver: (e: React.DragEvent) => void;
+	handleDragLeave: (e: React.DragEvent) => void;
+	handleDrop: (e: React.DragEvent) => void;
+	fileInputRef: React.RefObject<HTMLInputElement | null>;
 	imagePreview: string | null;
-	setImageFile: (n: File | null) => void;
-	setImagePreview: (n: string | null) => void;
-	handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	handleImageUpload: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 const ImagePreview = ({
+	fileInputRef,
+	handleDragLeave,
 	handleDragOver,
 	handleDrop,
-	handleImageChange,
+	handleImageUpload,
 	imagePreview,
-	setImageFile,
-	setImagePreview,
-}: ImagePreviewProps) => {
+	isDragging,
+}: ImagePreview) => {
 	return (
 		<div
-			className='border-2 border-dashed rounded-md p-6 flex flex-col items-center justify-center cursor-pointer'
-			onDrop={handleDrop}
+			className={` relative mx-auto w-48 h-48 rounded-full border-2 border-dashed flex flex-col items-center justify-center cursor-pointer ${
+				isDragging ? "border-primary bg-primary/5" : "border-gray-300"
+			}`}
 			onDragOver={handleDragOver}
+			onDragLeave={handleDragLeave}
+			onDrop={handleDrop}
+			onClick={() => fileInputRef.current?.click()}
 		>
 			{imagePreview ? (
-				<div className='relative w-full h-48'>
+				<div className='w-full h-full rounded-full overflow-hidden'>
 					<img
 						src={imagePreview || "/placeholder.svg"}
-						alt='Product preview'
-						className='w-full h-full object-contain'
+						alt='Employee'
+						className='w-full h-full object-cover'
 					/>
-					<Button
-						type='button'
-						variant='secondary'
-						size='sm'
-						className='absolute bottom-2 right-2'
-						onClick={() => {
-							setImageFile(null);
-							setImagePreview(null);
-						}}
-					>
-						Remove
-					</Button>
 				</div>
 			) : (
 				<>
-					<p className='text-lg font-medium mb-2'>Nothing Here Yet</p>
-					<p className='text-sm text-muted-foreground mb-4'>
+					<p className='text-sm text-center text-gray-500'>
 						Drag and drop to upload, or
 					</p>
-					<div className='relative'>
-						<Button
-							type='button'
-							variant='secondary'
-							className='bg-black text-white hover:bg-gray-800'
-						>
-							Add image
-						</Button>
-						<input
-							type='file'
-							accept='image/*'
-							className='absolute inset-0 w-full h-full opacity-0 cursor-pointer'
-							onChange={handleImageChange}
-						/>
-					</div>
+					<Button
+						variant='secondary'
+						size='sm'
+						className='mt-2 '
+						type='button'
+					>
+						Add image
+					</Button>
 				</>
 			)}
+			<input
+				ref={fileInputRef}
+				type='file'
+				accept='image/*'
+				className='hidden'
+				onChange={handleImageUpload}
+			/>
 		</div>
 	);
 };

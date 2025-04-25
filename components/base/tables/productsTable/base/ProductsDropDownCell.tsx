@@ -7,18 +7,32 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { TableCell } from "@/components/ui/table";
 import { MoreHorizontal } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { ProductCellProps } from "./ProductPhotoCell";
 import { Action, productsActions } from "@/lib/content/products.content";
+import EditProductModal from "../EditProductModal";
+import { useDispatch } from "react-redux";
+import { deleteProduct } from "@/store/slices/products.slice";
 
 const ProductsDropDownActions = ({ product }: ProductCellProps) => {
+	const [editModalOpen, setEditModalOpen] = useState(false);
+	const dispatch = useDispatch();
+
 	const renderDropDown = (action: Action) => {
 		const Icon = action.icon;
+
+		const handleAction = () => {
+			if (action.id === "edit") {
+				setEditModalOpen(true);
+			} else if (action.id === "delete") {
+				dispatch(deleteProduct(product.id));
+			}
+		};
 
 		return (
 			<DropdownMenuItem
 				key={action.id}
-				onClick={() => {}}
+				onClick={handleAction}
 				className='cursor-pointer'
 			>
 				<div
@@ -35,6 +49,7 @@ const ProductsDropDownActions = ({ product }: ProductCellProps) => {
 			</DropdownMenuItem>
 		);
 	};
+
 	return (
 		<TableCell className='text-right'>
 			<DropdownMenu>
@@ -51,6 +66,12 @@ const ProductsDropDownActions = ({ product }: ProductCellProps) => {
 					{productsActions.map((action) => renderDropDown(action))}
 				</DropdownMenuContent>
 			</DropdownMenu>
+
+			<EditProductModal
+				open={editModalOpen}
+				onOpenChange={setEditModalOpen}
+				product={product}
+			/>
 		</TableCell>
 	);
 };

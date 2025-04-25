@@ -1,8 +1,7 @@
 "use client";
 
 import type React from "react";
-
-import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import {
 	Dialog,
 	DialogContent,
@@ -10,17 +9,16 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 
-import ImagePreview from "./ProductModal/ImagePreview";
-import InputBody from "./ProductModal/InputBody";
-import ModalFooter from "./ProductModal/ModalFooter";
 import { Product } from "@/lib/content/products.content";
 import { useDispatch } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
-import { addProduct } from "@/store/slices/products.slice";
+import { updateProduct } from "@/store/slices/products.slice";
+import ImagePreview from "../../dashboard/header/ProductModal/ImagePreview";
+import InputBody from "../../dashboard/header/ProductModal/InputBody";
+import ModalFooter from "../../dashboard/header/ProductModal/ModalFooter";
 
 interface ProductFormData {
 	id: string;
-	photo: File | null;
+	photo: string | null | File;
 	name: string;
 	type: string;
 	amountSold: number;
@@ -28,26 +26,49 @@ interface ProductFormData {
 	description: string;
 	status: "active" | "inactive";
 }
-interface AddProductModalProps {
+
+interface EditProductModalProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
+	product: Product;
 }
 
-const ProductModal = ({ open, onOpenChange }: AddProductModalProps) => {
-	const [formData, setFormData] = useState<ProductFormData>({
-		name: "",
-		description: "",
-		price: 0,
-		type: "",
-		photo: null,
-		amountSold: 0,
-		id: "",
-		status: "inactive",
-	});
+const EditProductModal = ({
+	open,
+	onOpenChange,
+	product,
+}: EditProductModalProps) => {
+	const dispatch = useDispatch();
+	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [imagePreview, setImagePreview] = useState<string | null>(null);
 	const [isDragging, setIsDragging] = useState(false);
-	const fileInputRef = useRef<HTMLInputElement>(null);
-	const dispatch = useDispatch();
+
+	const [formData, setFormData] = useState<ProductFormData>({
+		id: product.id,
+		name: product.name,
+		description: product.description,
+		price: product.price,
+		type: product.type,
+		photo: null,
+		amountSold: product.amountSold,
+		status: product.status,
+	});
+
+	useEffect(() => {
+		if (product?.photo) {
+			setImagePreview(product.photo);
+		}
+		setFormData({
+			id: product.id,
+			name: product.name,
+			description: product.description,
+			price: product.price,
+			type: product.type,
+			photo: null,
+			amountSold: product.amountSold,
+			status: product.status,
+		});
+	}, [product]);
 
 	const handleInputChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -59,11 +80,9 @@ const ProductModal = ({ open, onOpenChange }: AddProductModalProps) => {
 	const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (file) {
-			setFormData((prev) => ({ ...prev, image: file }));
+			setFormData((prev) => ({ ...prev, photo: file }));
 			const reader = new FileReader();
-			reader.onload = () => {
-				setImagePreview(reader.result as string);
-			};
+			reader.onload = () => setImagePreview(reader.result as string);
 			reader.readAsDataURL(file);
 		}
 	};
@@ -77,11 +96,9 @@ const ProductModal = ({ open, onOpenChange }: AddProductModalProps) => {
 		setIsDragging(false);
 		const file = e.dataTransfer.files?.[0];
 		if (file) {
-			setFormData((prev) => ({ ...prev, image: file }));
+			setFormData((prev) => ({ ...prev, photo: file }));
 			const reader = new FileReader();
-			reader.onload = () => {
-				setImagePreview(reader.result as string);
-			};
+			reader.onload = () => setImagePreview(reader.result as string);
 			reader.readAsDataURL(file);
 		}
 	};
@@ -90,63 +107,45 @@ const ProductModal = ({ open, onOpenChange }: AddProductModalProps) => {
 		setIsDragging(false);
 	};
 
+	const handleTypeChange = (value: string) => {
+		setFormData((prev) => ({ ...prev, type: value }));
+	};
+
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 
-		const id = uuidv4().slice(0, 3);
 		let photoFilename = "";
-		let uploadedImagePath;
-		if (formData.photo) {
-			const extension = formData.photo.name.split(".").pop();
-			photoFilename = `${id}-product.${extension}`;
+		let uploadedImagePath = product.photo;
+
+		if (formData.photo instanceof File) {
+			let extension = formData.photo.name.split(".").pop();
+			photoFilename = `${product.id}-product.${extension}`;
 
 			const imageForm = new FormData();
 			imageForm.append("image", formData.photo, photoFilename);
 
-			// Upload the image
-			// const response = await fetch("/api/upload/product-image", {
+			// Upload logic here
+			// await fetch("/api/upload/product-image", {
 			// 	method: "POST",
 			// 	body: imageForm,
 			// });
 
-			// if (!response.ok) {
-			// 	console.error("Image upload failed");
-			// 	return;
-			// }
-
 			uploadedImagePath = `/static/productsImages/${photoFilename}`;
 		}
 
-		const newProduct: Product = {
-			id,
+		const updatedProduct: Product = {
+			id: product.id,
 			name: formData.name,
 			description: formData.description,
 			price: formData.price,
 			type: formData.type,
 			photo: uploadedImagePath ?? "",
 			amountSold: formData.amountSold,
-			status: formData.status === "active" ? "active" : "inactive",
+			status: formData.status,
 		};
 
-		dispatch(addProduct(newProduct));
+		dispatch(updateProduct(updatedProduct));
 		onOpenChange(false);
-		resetForm();
-	};
-	const resetForm = () => {
-		setFormData({
-			name: "",
-			description: "",
-			price: 0,
-			type: "",
-			photo: null,
-			id: "",
-			amountSold: 0,
-			status: "inactive",
-		});
-		setImagePreview(null);
-	};
-	const handleTypeChange = (value: string) => {
-		setFormData((prev) => ({ ...prev, type: value }));
 	};
 
 	return (
@@ -156,7 +155,9 @@ const ProductModal = ({ open, onOpenChange }: AddProductModalProps) => {
 		>
 			<DialogContent className='sm:max-w-md md:max-w-lg'>
 				<DialogHeader>
-					<DialogTitle className='text-xl font-medium'>Add Product</DialogTitle>
+					<DialogTitle className='text-xl font-medium'>
+						Edit Product
+					</DialogTitle>
 				</DialogHeader>
 				<form
 					onSubmit={handleSubmit}
@@ -180,7 +181,8 @@ const ProductModal = ({ open, onOpenChange }: AddProductModalProps) => {
 
 					<ModalFooter
 						onOpenChange={onOpenChange}
-						resetForm={resetForm}
+						resetForm={() => setFormData(product)}
+                        isEdit= {true}
 					/>
 				</form>
 			</DialogContent>
@@ -188,4 +190,4 @@ const ProductModal = ({ open, onOpenChange }: AddProductModalProps) => {
 	);
 };
 
-export default ProductModal;
+export default EditProductModal;

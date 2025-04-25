@@ -10,7 +10,23 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import React from "react";
 
-const InputBody = () => {
+interface InputBodyProps {
+	formData: {
+		name: string;
+		type: string;
+		description: string;
+	};
+	handleInputChange: (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => void;
+	handleTypeChange: (value: string) => void;
+}
+
+const InputBody = ({
+	formData,
+	handleInputChange,
+	handleTypeChange,
+}: InputBodyProps) => {
 	return (
 		<div className='space-y-4'>
 			<div className='space-y-2'>
@@ -22,6 +38,9 @@ const InputBody = () => {
 				</Label>
 				<Input
 					id='name'
+					name='name'
+					value={formData.name}
+					onChange={handleInputChange}
 					placeholder='Oil Name'
 					required
 				/>
@@ -34,7 +53,11 @@ const InputBody = () => {
 				>
 					Type <span className='text-red-500 ml-1'>*</span>
 				</Label>
-				<Select required>
+				<Select
+					value={formData.type}
+					onValueChange={handleTypeChange}
+					required
+				>
 					<SelectTrigger>
 						<SelectValue placeholder='Select one of the options' />
 					</SelectTrigger>
@@ -50,6 +73,9 @@ const InputBody = () => {
 				<Label htmlFor='description'>Description</Label>
 				<Textarea
 					id='description'
+					name='description'
+					value={formData.description}
+					onChange={handleInputChange}
 					placeholder='Add a description'
 				/>
 			</div>
