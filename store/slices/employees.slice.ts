@@ -15,7 +15,7 @@ interface EmployeesState {
 	employees: Employee[];
 	queriedEmployees: Employee[];
 	modifiedEmployees: Employee[];
-	selectedStatus: string | null;
+	selectedStatus: Employee["status"] | null;
 }
 
 const initialState: EmployeesState = {
@@ -91,7 +91,10 @@ const EmployeesSlice = createSlice({
 				employee.balance = Math.ceil(newBalance * 10) / 10; // Round to 1 decimal place
 			}
 		},
-		setSelectedEmployeeStatus(state, action: PayloadAction<string | null>) {
+		setSelectedEmployeeStatus(
+			state,
+			action: PayloadAction<Employee["status"] | null>
+		) {
 			state.selectedStatus = action.payload;
 		},
 		clearEmployees(state) {
