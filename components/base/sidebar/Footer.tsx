@@ -13,7 +13,7 @@ const Footer = () => {
 	const handleLogout = () => {
 		// handle logout
 		localStorage.removeItem("token");
-		navigate.push("/");
+		navigate.push("/auth");
 	};
 
 	const handleOpenModal = () => {
