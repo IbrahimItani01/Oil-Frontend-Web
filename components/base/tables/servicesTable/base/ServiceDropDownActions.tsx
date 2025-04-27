@@ -8,13 +8,13 @@ import {
 import { TableCell } from "@/components/ui/table";
 import { MoreHorizontal } from "lucide-react";
 import React, { useState } from "react";
-import { ProductCellProps } from "./ProductPhotoCell";
-import { Action, productsActions } from "@/lib/content/products.content";
-import EditProductModal from "../EditServiceModal";
+import { Action, servicesActions } from "@/lib/content/services.content";
+import EditserviceModal from "../EditServiceModal";
 import { useDispatch } from "react-redux";
-import { deleteProduct } from "@/store/slices/products.slice";
+import { ServiceCellProps } from "./ServicePhotoCell";
+import { deleteService } from "@/store/slices/services.slice";
 
-const ProductsDropDownActions = ({ product }: ProductCellProps) => {
+const ServicesDropDownActions = ({ service }: ServiceCellProps) => {
 	const [editModalOpen, setEditModalOpen] = useState(false);
 	const dispatch = useDispatch();
 
@@ -25,7 +25,7 @@ const ProductsDropDownActions = ({ product }: ProductCellProps) => {
 			if (action.id === "edit") {
 				setEditModalOpen(true);
 			} else if (action.id === "delete") {
-				dispatch(deleteProduct(product.id));
+				dispatch(deleteService(service.id));
 			}
 		};
 
@@ -63,17 +63,17 @@ const ProductsDropDownActions = ({ product }: ProductCellProps) => {
 					</Button>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent align='end'>
-					{productsActions.map((action) => renderDropDown(action))}
+					{servicesActions.map((action) => renderDropDown(action))}
 				</DropdownMenuContent>
 			</DropdownMenu>
 
-			<EditProductModal
+			<EditserviceModal
 				open={editModalOpen}
 				onOpenChange={setEditModalOpen}
-				product={product}
+				service={service}
 			/>
 		</TableCell>
 	);
 };
 
-export default ProductsDropDownActions;
+export default ServicesDropDownActions;

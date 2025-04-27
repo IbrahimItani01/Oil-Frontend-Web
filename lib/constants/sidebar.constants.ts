@@ -4,6 +4,7 @@ import {
 	UserCircle,
 	Package,
 	Calendar,
+	Wrench,
 } from "lucide-react";
 export const navigationItems = [
 	{
@@ -12,19 +13,24 @@ export const navigationItems = [
 		icon: LayoutDashboard,
 	},
 	{
-		name: "Employees",
-		href: "/dashboard/employees",
-		icon: Users,
-	},
-	{
 		name: "Users",
 		href: "/dashboard/users",
 		icon: UserCircle,
 	},
 	{
+		name: "Employees",
+		href: "/dashboard/employees",
+		icon: Users,
+	},
+	{
 		name: "Products",
 		href: "/dashboard/products",
 		icon: Package,
+	},
+	{
+		name: "Services",
+		href: "/dashboard/services",
+		icon: Wrench,
 	},
 	{
 		name: "Appointments",

@@ -1,12 +1,12 @@
 import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { productColumns } from "@/lib/content/products.content";
+import { serviceColumns } from "@/lib/content/services.content";
 import React from "react";
 
-const ProductsTableHeader = () => {
+const ServicesTableHeader = () => {
 	return (
 		<TableHeader>
 			<TableRow className='bg-gray-50'>
-				{productColumns.map((column) => (
+				{serviceColumns.map((column) => (
 					<TableHead
 						key={column.id}
 						className='text-gray-500 font-normal'
@@ -22,4 +22,4 @@ const ProductsTableHeader = () => {
 	);
 };
 
-export default ProductsTableHeader;
+export default ServicesTableHeader;

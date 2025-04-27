@@ -47,41 +47,58 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		const hasSynced = localStorage.getItem("hasSynced");
 
 		const initializeData = async () => {
-			if (!token) {
-				router.push("/auth");
-				return;
-			}
+			// if (!token) {
+			// 	// router.push("/auth");
+			// 	router.push("/dashboard");
+			// 	return;
+			// }
 
-			if (!hasSynced) {
-				// Only fetch data if not already synced on unload
-				try {
-					const apiUsers = await fetchUsers();
-					const apiEmployees = await fetchEmployees();
-					const apiOrders = await fetchOrders();
-					const apiAppointments = await fetchAppointments();
-					const apiProducts = await fetchProducts();
-					const apiServices = await fetchServices();
-					dispatch(setUsers(apiUsers.length ? apiUsers : usersData));
-					dispatch(
-						setEmployees(apiEmployees.length ? apiEmployees : employeesData)
-					);
-					dispatch(setOrders(apiOrders.length ? apiOrders : ordersData));
-					dispatch(
-						setAppointments(
-							apiAppointments.length ? apiAppointments : appointmentsData
-						)
-					);
-					dispatch(
-						setProducts(apiProducts.length ? apiProducts : productsData)
-					);
-					dispatch(
-						setServices(apiServices.length ? apiServices : servicesData)
-					);
-				} catch (error) {
-					console.error("Failed to fetch data:", error);
-				}
-			}
-
+			// if (!hasSynced && token) {
+			// 	try {
+			// 		const apiUsers = await fetchUsers();
+			// 		const apiEmployees = await fetchEmployees();
+			// 		const apiOrders = await fetchOrders();
+			// 		const apiAppointments = await fetchAppointments();
+			// 		const apiProducts = await fetchProducts();
+			// 		const apiServices = await fetchServices();
+			// 		dispatch(setUsers(apiUsers.length ? apiUsers : usersData));
+			// 		dispatch(
+			// 			setEmployees(apiEmployees.length ? apiEmployees : employeesData)
+			// 		);
+			// 		dispatch(setOrders(apiOrders.length ? apiOrders : ordersData));
+			// 		dispatch(
+			// 			setAppointments(
+			// 				apiAppointments.length ? apiAppointments : appointmentsData
+			// 			)
+			// 		);
+			// 		dispatch(
+			// 			setProducts(apiProducts.length ? apiProducts : productsData)
+			// 		);
+			// 		dispatch(
+			// 			setServices(apiServices.length ? apiServices : servicesData)
+			// 		);
+			// 	} catch (error) {
+			// 		console.error("Failed to fetch data:", error);
+			// 	}
+			// }
+			const apiUsers = await fetchUsers();
+			const apiEmployees = await fetchEmployees();
+			const apiOrders = await fetchOrders();
+			const apiAppointments = await fetchAppointments();
+			const apiProducts = await fetchProducts();
+			const apiServices = await fetchServices();
+			dispatch(setUsers(apiUsers.length ? apiUsers : usersData));
+			dispatch(
+				setEmployees(apiEmployees.length ? apiEmployees : employeesData)
+			);
+			dispatch(setOrders(apiOrders.length ? apiOrders : ordersData));
+			dispatch(
+				setAppointments(
+					apiAppointments.length ? apiAppointments : appointmentsData
+				)
+			);
+			dispatch(setProducts(apiProducts.length ? apiProducts : productsData));
+			dispatch(setServices(apiServices.length ? apiServices : servicesData));
 			// Clear sync flag after reload
 			localStorage.removeItem("hasSynced");
 

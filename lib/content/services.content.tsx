@@ -23,7 +23,7 @@ export interface Service {
 	status: "active" | "inactive";
 }
 
-export const productColumns: Column[] = [
+export const serviceColumns: Column[] = [
 	{ id: "id", label: "ID" },
 	{ id: "photo", label: "Photo" },
 	{ id: "name", label: "Name" },
@@ -33,7 +33,7 @@ export const productColumns: Column[] = [
 	{ id: "status", label: "Status" },
 ];
 
-export const productsActions: Action[] = [
+export const servicesActions: Action[] = [
 	{
 		id: "edit",
 		label: "Edit",
@@ -48,9 +48,9 @@ export const productsActions: Action[] = [
 	},
 ];
 
-export const productsFilterDefault = "all";
+export const servicesFilterDefault = "all";
 
-export const productsFilters: Filter[] = [
+export const servicesFilters: Filter[] = [
 	{
 		value: "all",
 		label: "All",

@@ -2,31 +2,32 @@
 import { useAppSelector } from "@/store/store";
 import React from "react";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
-import ProductsTableHeader from "./base/ProductsTableHeader";
-import ProductPhotoCell from "./base/ProductPhotoCell";
-import ProductStatusCell from "./base/ProductStatusCell";
-import ProductsDropDownActions from "./base/ProductsDropDownCell";
+import ServicePhotoCell from "./base/ServicePhotoCell";
+import ServicesTableHeader from "./base/ServicesTableHeader";
+import ServiceStatusCell from "./base/ServiceStatusCell";
+import ServicesDropDownActions from "./base/ServiceDropDownActions";
 
 const ServicesTable = () => {
-	const products = useAppSelector((state) => state.products.queriedProducts);
+	const services = useAppSelector((state) => state.services.queriedServices);
 
 	return (
 		<div className='w-full relative'>
 			<Table>
-				<ProductsTableHeader />
+				<ServicesTableHeader />
 				<TableBody>
-					{products.map((product) => (
+					{services.map((service) => (
 						<TableRow
-							key={product.id}
-							className={product.status === "inactive" ? "opacity-60" : ""}
+							key={service.id}
+							className={service.status === "inactive" ? "opacity-60" : ""}
 						>
-							<TableCell className='font-medium'>{product.id}</TableCell>
-							<ProductPhotoCell product={product} />
-							<TableCell>{product.name}</TableCell>
-							<TableCell>{product.type}</TableCell>
-							<TableCell>{product.amountSold}</TableCell>
-							<ProductStatusCell product={product} />
-							<ProductsDropDownActions product={product} />
+							<TableCell className='font-medium'>{service.id}</TableCell>
+							<ServicePhotoCell service={service} />
+							<TableCell>{service.name}</TableCell>
+							<TableCell>{service.type}</TableCell>
+							<TableCell>${service.fee}</TableCell>
+							<TableCell>{service.duration}</TableCell>
+							<ServiceStatusCell service={service} />
+							<ServicesDropDownActions service={service} />
 						</TableRow>
 					))}
 				</TableBody>
