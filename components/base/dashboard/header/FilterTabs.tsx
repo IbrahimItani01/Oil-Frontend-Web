@@ -7,6 +7,7 @@ import {
 	appointmentsFilters,
 } from "@/lib/content/appointments.content";
 import {
+	Employee,
 	employeesFilter,
 	employeesFilterDefault,
 } from "@/lib/content/employees.content";
@@ -15,6 +16,10 @@ import {
 	productsFilterDefault,
 	productsFilters,
 } from "@/lib/content/products.content";
+import {
+	servicesFilterDefault,
+	servicesFilters,
+} from "@/lib/content/services.content";
 import { usersFilterDefault, usersFilters } from "@/lib/content/users.content";
 import {
 	setQueriedAppointments,
@@ -28,6 +33,10 @@ import {
 	setQueriedProducts,
 	setSelectedProductStatus,
 } from "@/store/slices/products.slice";
+import {
+	setQueriedServices,
+	setSelectedServiceStatus,
+} from "@/store/slices/services.slice";
 import {
 	setQueriedUsers,
 	setSelectedUserStatus,
@@ -46,6 +55,7 @@ const FilterTabs = () => {
 		(state) => state.appointments.appointments
 	);
 	const allProducts = useAppSelector((state) => state.products.products);
+	const allServices = useAppSelector((state) => state.services.services);
 
 	// Each section gets its own tab state
 	const [userTab, setUserTab] = useState(usersFilterDefault);
@@ -54,6 +64,7 @@ const FilterTabs = () => {
 		appointmentsFilterDefault
 	);
 	const [productTab, setProductTab] = useState(productsFilterDefault);
+	const [serviceTab, setServiceTab] = useState(servicesFilterDefault);
 
 	// Reset tabs when switching routes
 	useEffect(() => {
@@ -77,6 +88,11 @@ const FilterTabs = () => {
 			dispatch(setSelectedProductStatus(null));
 			dispatch(setQueriedProducts(allProducts));
 		}
+		if (pathname === "/dashboard/services") {
+			setServiceTab(servicesFilterDefault);
+			dispatch(setSelectedServiceStatus(null));
+			dispatch(setQueriedServices(allServices));
+		}
 	}, [
 		pathname,
 		dispatch,
@@ -84,6 +100,7 @@ const FilterTabs = () => {
 		allEmployees,
 		allAppointments,
 		allProducts,
+		allServices,
 	]);
 
 	if (pathname === "/dashboard/users") {
@@ -118,7 +135,14 @@ const FilterTabs = () => {
 	if (pathname === "/dashboard/employees") {
 		const handleEmployeesFilter = (status: string) => {
 			setEmployeeTab(status);
-			dispatch(setSelectedEmployeeStatus(status === "all" ? null : status));
+			const validStatuses = ["active", "inactive"] as const;
+
+			if (status === "all") {
+				dispatch(setSelectedEmployeeStatus(null));
+			} else if (validStatuses.includes(status as any)) {
+				dispatch(setSelectedEmployeeStatus(status as Employee["status"]));
+			}
+
 			const filtered =
 				status === "all"
 					? allEmployees
@@ -132,7 +156,7 @@ const FilterTabs = () => {
 					{employeesFilter.map((filter, i) => (
 						<TabsTrigger
 							key={i}
-							className='min-w-[100px]  cursor-pointer transition-all duration-300 ease-in-out data-[state=active]:bg-white data-[state=active]:shadow-sm'
+							className='min-w-[100px] cursor-pointer transition-all duration-300 ease-in-out data-[state=active]:bg-white data-[state=active]:shadow-sm'
 							value={filter.value}
 							onClick={() => handleEmployeesFilter(filter.value)}
 						>
@@ -217,6 +241,42 @@ const FilterTabs = () => {
 			</Tabs>
 		);
 	}
+	if (pathname === "/dashboard/services") {
+		const handleServicesFilter = (status: string) => {
+			setServiceTab(status); // ✅ FIXED
+			const validStatuses = ["active", "inactive"] as const;
+
+			if (status === "all") {
+				dispatch(setSelectedServiceStatus(null));
+			} else if (validStatuses.includes(status as any)) {
+				dispatch(setSelectedServiceStatus(status as Product["status"]));
+			}
+
+			const filtered =
+				status === "all"
+					? allServices
+					: allServices.filter((e) => e.status === status);
+			dispatch(setQueriedServices(filtered));
+		};
+
+		return (
+			<Tabs value={serviceTab}>
+				<TabsList className='bg-gray-100 p-1 rounded-lg'>
+					{servicesFilters.map((filter, i) => (
+						<TabsTrigger
+							key={i}
+							className='min-w-[100px] cursor-pointer transition-all duration-300 ease-in-out data-[state=active]:bg-white data-[state=active]:shadow-sm'
+							value={filter.value}
+							onClick={() => handleServicesFilter(filter.value)}
+						>
+							{filter.label}
+						</TabsTrigger>
+					))}
+				</TabsList>
+			</Tabs>
+		);
+	}
+
 	return <></>;
 };
 

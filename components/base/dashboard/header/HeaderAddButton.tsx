@@ -5,14 +5,17 @@ import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import EmployeeModal from "./AddEmployeeModal";
 import ProductModal from "./AddProductModal";
+import ServiceModal from "./AddServiceModal";
 
 const HeaderAddButton = () => {
 	const pathname = usePathname();
 	const [openEmployee, setOpenEmployee] = useState(false);
 	const [openProduct, setOpenProduct] = useState(false);
+	const [openService, setOpenService] = useState(false);
 	if (
 		pathname !== "/dashboard/employees" &&
-		pathname !== "/dashboard/products"
+		pathname !== "/dashboard/products" &&
+		pathname !== "/dashboard/services"
 	) {
 		return null;
 	}
@@ -21,6 +24,8 @@ const HeaderAddButton = () => {
 			setOpenEmployee(true);
 		} else if (pathname.includes("products")) {
 			setOpenProduct(true);
+		} else if (pathname.includes("services")) {
+			setOpenService(true);
 		}
 	};
 	return (
@@ -44,6 +49,12 @@ const HeaderAddButton = () => {
 				<ProductModal
 					open={openProduct}
 					onOpenChange={setOpenProduct}
+				/>
+			)}
+			{openService && (
+				<ServiceModal
+					open={openService}
+					onOpenChange={setOpenService}
 				/>
 			)}
 		</>

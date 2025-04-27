@@ -10,9 +10,9 @@ import {
 	DialogTitle,
 } from "@/components/ui/dialog";
 
-import ImagePreview from "./ProductModal/ImagePreview";
-import InputBody from "./ProductModal/InputBody";
-import ModalFooter from "./ProductModal/ModalFooter";
+import ImagePreview from "./ServiceModal/ImagePreview";
+import InputBody from "./ServiceModal/InputBody";
+import ModalFooter from "./ServiceModal/ModalFooter";
 import { Product } from "@/lib/content/products.content";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
@@ -30,12 +30,12 @@ interface ServiceFormData {
 	duration: string;
 	status: "active" | "inactive";
 }
-interface AddProductModalProps {
+interface AddServiceModalProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 }
 
-const ProductModal = ({ open, onOpenChange }: AddProductModalProps) => {
+const ServiceModal = ({ open, onOpenChange }: AddServiceModalProps) => {
 	const [formData, setFormData] = useState<ServiceFormData>({
 		name: "",
 		description: "",
@@ -158,7 +158,7 @@ const ProductModal = ({ open, onOpenChange }: AddProductModalProps) => {
 		>
 			<DialogContent className='sm:max-w-md md:max-w-lg'>
 				<DialogHeader>
-					<DialogTitle className='text-xl font-medium'>Add Product</DialogTitle>
+					<DialogTitle className='text-xl font-medium'>Add Service</DialogTitle>
 				</DialogHeader>
 				<form
 					onSubmit={handleSubmit}
@@ -191,4 +191,4 @@ const ProductModal = ({ open, onOpenChange }: AddProductModalProps) => {
 	);
 };
 
-export default ProductModal;
+export default ServiceModal;

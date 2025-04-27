@@ -12,6 +12,7 @@ import {
 	setQueriedProducts,
 	setSelectedProductStatus,
 } from "@/store/slices/products.slice";
+import { setQueriedServices } from "@/store/slices/services.slice";
 
 interface SearchBarProps {
 	placeholder?: string;
@@ -32,6 +33,9 @@ const HeaderSearchBar = ({
 	const allProducts = useSelector(
 		(state: RootState) => state.products.products
 	);
+	const allServices = useSelector(
+		(state: RootState) => state.services.services
+	);
 	const [value, setValue] = useState("");
 	const selectedUsersStatus = useSelector(
 		(state: RootState) => state.users.selectedStatus
@@ -44,6 +48,9 @@ const HeaderSearchBar = ({
 	);
 	const selectedProductsStatus = useSelector(
 		(state: RootState) => state.products.selectedStatus
+	);
+	const selectedServiceStatus = useSelector(
+		(state: RootState) => state.services.selectedStatus
 	);
 	const handleSearch = useCallback(
 		(searchVal: string) => {
@@ -155,18 +162,47 @@ const HeaderSearchBar = ({
 
 				dispatch(setQueriedProducts(filtered));
 			}
+			if (pathname === "/dashboard/services") {
+				const trimmed = searchVal.trim();
+
+				if (!trimmed) {
+					const filtered = selectedServiceStatus
+						? allServices.filter(
+								(service) => service.status === selectedServiceStatus
+						  )
+						: allServices;
+
+					dispatch(setQueriedServices(filtered));
+					return;
+				}
+
+				// 🔍 Apply search + status filter
+				const filtered = allServices.filter((service) => {
+					const matchesName = service.name
+						.toLowerCase()
+						.includes(trimmed.toLowerCase());
+					const matchesStatus = selectedServiceStatus
+						? service.status === selectedServiceStatus
+						: true;
+					return matchesName && matchesStatus;
+				});
+
+				dispatch(setQueriedServices(filtered));
+			}
 		},
 		[
 			allUsers,
 			allEmployees,
 			allAppointments,
 			allProducts,
+			allServices,
 			dispatch,
 			pathname,
 			selectedUsersStatus,
 			selectedEmployeesStatus,
 			selectedAppointmentsStatus,
 			selectedProductsStatus,
+			selectedServiceStatus,
 		]
 	);
 
