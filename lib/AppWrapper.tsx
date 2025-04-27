@@ -9,7 +9,7 @@ import { Employee, employeesData } from "./content/employees.content";
 import {
 	useSyncOnPageUnload,
 	useSyncOnRouteChange,
-} from "./handlers/usersData.handlers";
+} from "./handlers/data.handlers";
 import { fetchUsers } from "@/apis/users.apis";
 import { fetchEmployees } from "@/apis/employees.apis";
 import { fetchOrders } from "@/apis/orders.apis";
@@ -21,6 +21,9 @@ import { Appointment, appointmentsData } from "./content/appointments.content";
 import { fetchProducts } from "@/apis/products.apis";
 import { setProducts } from "@/store/slices/products.slice";
 import { Product, productsData } from "./content/products.content";
+import { fetchServices } from "@/apis/services.apis";
+import { setServices } from "@/store/slices/services.slice";
+import { Service, servicesData } from "./content/services.content";
 
 const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 	const dispatch = useAppDispatch();
@@ -34,6 +37,9 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 	);
 	const modifiedProducts = useAppSelector(
 		(state) => state.products.modifiedProducts
+	);
+	const modifiedServices = useAppSelector(
+		(state) => state.services.modifiedServices
 	);
 
 	useEffect(() => {
@@ -54,6 +60,7 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 					const apiOrders = await fetchOrders();
 					const apiAppointments = await fetchAppointments();
 					const apiProducts = await fetchProducts();
+					const apiServices = await fetchServices();
 					dispatch(setUsers(apiUsers.length ? apiUsers : usersData));
 					dispatch(
 						setEmployees(apiEmployees.length ? apiEmployees : employeesData)
@@ -66,6 +73,9 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 					);
 					dispatch(
 						setProducts(apiProducts.length ? apiProducts : productsData)
+					);
+					dispatch(
+						setServices(apiServices.length ? apiServices : servicesData)
 					);
 				} catch (error) {
 					console.error("Failed to fetch data:", error);
@@ -99,6 +109,10 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		console.log("Syncing modiifed products", data);
 		// TODO: Call your backend API here
 	};
+	const syncModifiedServices = (data: Service[]) => {
+		console.log("Syncing modiifed services", data);
+		// TODO: Call your backend API here
+	};
 	// Sync on unload
 	useSyncOnPageUnload("users", modifiedUsers, syncModifiedUsers);
 	useSyncOnPageUnload("employees", modifiedEmployees, syncModifiedEmployees);
@@ -108,6 +122,7 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		syncModifiedAppointments
 	);
 	useSyncOnPageUnload("products", modifiedProducts, syncModifiedProducts);
+	useSyncOnPageUnload("services", modifiedServices, syncModifiedServices);
 
 	// Sync on route change
 	useSyncOnRouteChange(modifiedUsers, "/dashboard/users", syncModifiedUsers);
@@ -126,7 +141,11 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		"/dashboard/products",
 		syncModifiedProducts
 	);
-
+	useSyncOnRouteChange(
+		modifiedServices,
+		"/dashboard/services",
+		syncModifiedServices
+	);
 	return <>{children}</>;
 };
 

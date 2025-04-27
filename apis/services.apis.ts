@@ -1,7 +1,9 @@
+import { Appointment } from "@/lib/content/appointments.content";
 import { Product } from "@/lib/content/products.content";
+import { Service } from "@/lib/content/services.content";
 import axios from "axios";
 
-export const syncModifiedProducts = async (modifiedProducts: Product[]) => {
+export const syncModifiedServices = async (modifiedProducts: Service[]) => {
 	const syncUrl = process?.env?.NEXT_PUBLIC_PRODUCTS_SYNC_DATA_URL;
 	if (syncUrl) {
 		try {
@@ -15,7 +17,7 @@ export const syncModifiedProducts = async (modifiedProducts: Product[]) => {
 		}
 	}
 };
-export const fetchProducts = async (): Promise<Product[]> => {
+export const fetchServices = async (): Promise<Service[]> => {
 	try {
 		// Replace with actual API call in future
 		// const response = await axios.get("/api/employees");
@@ -23,7 +25,7 @@ export const fetchProducts = async (): Promise<Product[]> => {
 
 		return [];
 	} catch (error) {
-		console.error("Failed to fetch products:", error);
+		console.error("Failed to fetch services:", error);
 		return [];
 	}
 };
