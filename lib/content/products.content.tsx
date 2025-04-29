@@ -1,5 +1,6 @@
 import { Edit, LucideIcon, Trash } from "lucide-react";
 import { Filter } from "./users.content";
+import { categoriesData } from "./categories.content";
 interface Column {
 	id: string;
 	label: string;
@@ -68,8 +69,8 @@ export const productsData: Product[] = [
 	{
 		id: "p001",
 		photo: "/static/productsImages/p001-image.jpg",
-		name: "Herbal Shampoo",
-		type: "Haircare",
+		name: "Michellen Tires",
+		type: "Tires & Wheels",
 		amountSold: 120,
 		status: "active",
 		description: "lorem",
@@ -78,8 +79,8 @@ export const productsData: Product[] = [
 	{
 		id: "p002",
 		photo: "/static/productsImages/p002-image.jpg",
-		name: "Silky Conditioner",
-		type: "Haircare",
+		name: "Phone Stand",
+		type: "Car Accessories",
 		amountSold: 95,
 		status: "active",
 		description: "lorem",
@@ -88,8 +89,8 @@ export const productsData: Product[] = [
 	{
 		id: "p003",
 		photo: "/static/productsImages/p003-image.jpg",
-		name: "Aloe Face Wash",
-		type: "Skincare",
+		name: "Tire Rims",
+		type: "Tires & Wheels",
 		amountSold: 200,
 		status: "inactive",
 		description: "lorem",
@@ -98,8 +99,8 @@ export const productsData: Product[] = [
 	{
 		id: "p004",
 		photo: "/static/productsImages/p004-image.jpg",
-		name: "Vitamin C Serum",
-		type: "Skincare",
+		name: "Tires Spray",
+		type: "Tires & Wheels",
 		amountSold: 180,
 		status: "active",
 		description: "lorem",
@@ -108,8 +109,8 @@ export const productsData: Product[] = [
 	{
 		id: "p005",
 		photo: "/static/productsImages/p005-image.jpg",
-		name: "Styling Gel",
-		type: "Haircare",
+		name: "Car cleaning cloth",
+		type: "Car Accessories",
 		amountSold: 60,
 		status: "inactive",
 		description: "lorem",

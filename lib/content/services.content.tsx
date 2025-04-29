@@ -70,7 +70,7 @@ export const servicesData: Service[] = [
 		id: "s001",
 		photo: "/static/servicesImages/s001-image.jpg",
 		name: "Oil Change",
-		type: "Maintenance",
+		type: "Engine Services",
 		fee: 50,
 		duration: "45 mins",
 		description: "Engine oil change with filter replacement.",
@@ -79,8 +79,8 @@ export const servicesData: Service[] = [
 	{
 		id: "s002",
 		photo: "/static/servicesImages/s002-image.jpg",
-		name: "Tire Rotation",
-		type: "Maintenance",
+		name: "Deep Car Clean",
+		type: "Car Wash & Detailing",
 		fee: 30,
 		duration: "30 mins",
 		description:
@@ -90,8 +90,8 @@ export const servicesData: Service[] = [
 	{
 		id: "s003",
 		photo: "/static/servicesImages/s003-image.jpg",
-		name: "Brake Inspection",
-		type: "Safety",
+		name: "Brake Oil Change",
+		type: "Oil Change",
 		fee: 40,
 		duration: "35 mins",
 		description: "Comprehensive brake system check-up and report.",
@@ -100,8 +100,8 @@ export const servicesData: Service[] = [
 	{
 		id: "s004",
 		photo: "/static/servicesImages/s004-image.jpg",
-		name: "Battery Replacement",
-		type: "Repair",
+		name: "Refill AC Gas",
+		type: "AC & Heating",
 		fee: 150,
 		duration: "1 hour",
 		description: "Battery testing and full replacement if needed.",
@@ -110,8 +110,8 @@ export const servicesData: Service[] = [
 	{
 		id: "s005",
 		photo: "/static/servicesImages/s005-image.jpg",
-		name: "Engine Diagnostics",
-		type: "Diagnostics",
+		name: "Replace brake pads",
+		type: "Brakes & Suspension",
 		fee: 80,
 		duration: "1 hour",
 		description:
