@@ -53,7 +53,9 @@ const HeaderSearchBar = ({
 	const selectedServiceStatus = useSelector(
 		(state: RootState) => state.services.selectedStatus
 	);
-
+	const selectedCategoriesStatus = useSelector(
+		(state: RootState) => state.categories.selectedKey
+	);
 	const handleSearch = useCallback(
 		(searchVal: string) => {
 			if (pathname === "/dashboard/users") {
@@ -195,13 +197,25 @@ const HeaderSearchBar = ({
 				const trimmed = searchVal.trim();
 
 				if (!trimmed) {
-					dispatch(setQueriedCategories(allCategories));
+					const filtered = selectedCategoriesStatus
+						? allCategories.filter(
+								(category) => category.for === selectedCategoriesStatus
+						  )
+						: allCategories;
+
+					dispatch(setQueriedCategories(filtered));
 					return;
 				}
 
-				// 🔍 Apply name/description search
+				// 🔍 Apply search + for filter
 				const filtered = allCategories.filter((category) => {
-					return category.name.toLowerCase().includes(trimmed.toLowerCase());
+					const matchesName = category.name
+						.toLowerCase()
+						.includes(trimmed.toLowerCase());
+					const matchesFor = selectedCategoriesStatus
+						? category.for === selectedCategoriesStatus
+						: true;
+					return matchesName && matchesFor;
 				});
 
 				dispatch(setQueriedCategories(filtered));
@@ -221,6 +235,7 @@ const HeaderSearchBar = ({
 			selectedAppointmentsStatus,
 			selectedProductsStatus,
 			selectedServiceStatus,
+			selectedCategoriesStatus,
 		]
 	);
 
