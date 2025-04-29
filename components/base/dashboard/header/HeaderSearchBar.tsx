@@ -8,11 +8,9 @@ import { RootState } from "@/store/store";
 import { setQueriedUsers } from "@/store/slices/users.slice";
 import { setQueriedEmployees } from "@/store/slices/employees.slice";
 import { setQueriedAppointments } from "@/store/slices/appointments.slice";
-import {
-	setQueriedProducts,
-	setSelectedProductStatus,
-} from "@/store/slices/products.slice";
+import { setQueriedProducts } from "@/store/slices/products.slice";
 import { setQueriedServices } from "@/store/slices/services.slice";
+import { setQueriedCategories } from "@/store/slices/categories.slice";
 
 interface SearchBarProps {
 	placeholder?: string;
@@ -36,6 +34,9 @@ const HeaderSearchBar = ({
 	const allServices = useSelector(
 		(state: RootState) => state.services.services
 	);
+	const allCategories = useSelector(
+		(state: RootState) => state.categories.categories
+	);
 	const [value, setValue] = useState("");
 	const selectedUsersStatus = useSelector(
 		(state: RootState) => state.users.selectedStatus
@@ -52,6 +53,7 @@ const HeaderSearchBar = ({
 	const selectedServiceStatus = useSelector(
 		(state: RootState) => state.services.selectedStatus
 	);
+
 	const handleSearch = useCallback(
 		(searchVal: string) => {
 			if (pathname === "/dashboard/users") {
@@ -189,6 +191,21 @@ const HeaderSearchBar = ({
 
 				dispatch(setQueriedServices(filtered));
 			}
+			if (pathname === "/dashboard/categories") {
+				const trimmed = searchVal.trim();
+
+				if (!trimmed) {
+					dispatch(setQueriedCategories(allCategories));
+					return;
+				}
+
+				// 🔍 Apply name/description search
+				const filtered = allCategories.filter((category) => {
+					return category.name.toLowerCase().includes(trimmed.toLowerCase());
+				});
+
+				dispatch(setQueriedCategories(filtered));
+			}
 		},
 		[
 			allUsers,
@@ -196,6 +213,7 @@ const HeaderSearchBar = ({
 			allAppointments,
 			allProducts,
 			allServices,
+			allCategories,
 			dispatch,
 			pathname,
 			selectedUsersStatus,

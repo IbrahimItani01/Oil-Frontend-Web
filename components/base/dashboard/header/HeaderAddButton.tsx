@@ -6,16 +6,20 @@ import { usePathname } from "next/navigation";
 import EmployeeModal from "./AddEmployeeModal";
 import ProductModal from "./AddProductModal";
 import ServiceModal from "./AddServiceModal";
+import CategoryModal from "./AddCategoryModal";
 
 const HeaderAddButton = () => {
 	const pathname = usePathname();
 	const [openEmployee, setOpenEmployee] = useState(false);
 	const [openProduct, setOpenProduct] = useState(false);
 	const [openService, setOpenService] = useState(false);
+	const [openCategory, setOpenCategory] = useState(false);
+
 	if (
 		pathname !== "/dashboard/employees" &&
 		pathname !== "/dashboard/products" &&
-		pathname !== "/dashboard/services"
+		pathname !== "/dashboard/services" &&
+		pathname !== "/dashboard/categories"
 	) {
 		return null;
 	}
@@ -26,6 +30,8 @@ const HeaderAddButton = () => {
 			setOpenProduct(true);
 		} else if (pathname.includes("services")) {
 			setOpenService(true);
+		} else if (pathname.includes("categories")) {
+			setOpenCategory(true);
 		}
 	};
 	return (
@@ -55,6 +61,12 @@ const HeaderAddButton = () => {
 				<ServiceModal
 					open={openService}
 					onOpenChange={setOpenService}
+				/>
+			)}
+			{openCategory && (
+				<CategoryModal
+					open={openCategory}
+					onOpenChange={setOpenCategory}
 				/>
 			)}
 		</>
