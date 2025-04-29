@@ -16,12 +16,14 @@ export interface Category {
 	id: string;
 	name: string;
 	description: string;
+	for: "product" | "service";
 }
 
 export const categoriesColums: Column[] = [
 	{ id: "id", label: "ID" },
 	{ id: "name", label: "Name" },
 	{ id: "description", label: "Description" },
+	{ id: "for", label: "For" },
 ];
 
 export const categoriesActions: Action[] = [
@@ -47,12 +49,12 @@ export const categoriesFilter: Filter[] = [
 		label: "All",
 	},
 	{
-		value: "active",
-		label: "Active",
+		value: "product",
+		label: "For Product",
 	},
 	{
-		value: "inactive",
-		label: "Inactive",
+		value: "service",
+		label: "For Service",
 	},
 ];
 
@@ -62,45 +64,53 @@ export const categoriesData: Category[] = [
 		name: "Engine Services",
 		description:
 			"Maintenance and repair services related to engine performance and diagnostics.",
+		for: "service",
 	},
 	{
 		id: "c002",
 		name: "Tires & Wheels",
 		description:
 			"Products and services including tire replacement, balancing, and alignment.",
+		for: "product",
 	},
 	{
 		id: "c003",
 		name: "Car Wash & Detailing",
 		description:
 			"Exterior washing, interior cleaning, waxing, and full detailing services.",
+		for: "service",
 	},
 	{
 		id: "c004",
 		name: "Oil Change",
 		description:
 			"Regular oil replacement and filter changes for engine longevity.",
+		for: "service",
 	},
 	{
 		id: "c005",
 		name: "Battery Services",
 		description: "Battery testing, replacement, and charging services.",
+		for: "service",
 	},
 	{
 		id: "c006",
 		name: "Brakes & Suspension",
 		description: "Brake pad replacement, suspension repair, and safety checks.",
+		for: "service",
 	},
 	{
 		id: "c007",
 		name: "AC & Heating",
 		description:
 			"Air conditioning and heater diagnostics, repair, and recharging.",
+		for: "service",
 	},
 	{
 		id: "c008",
 		name: "Car Accessories",
 		description:
 			"Interior and exterior accessories including mats, covers, and tech add-ons.",
+		for: "product",
 	},
 ];
