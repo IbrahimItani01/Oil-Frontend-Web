@@ -5,6 +5,7 @@ import {
 	Package,
 	Calendar,
 	Wrench,
+	Layers,
 } from "lucide-react";
 export const navigationItems = [
 	{
@@ -31,6 +32,11 @@ export const navigationItems = [
 		name: "Services",
 		href: "/dashboard/services",
 		icon: Wrench,
+	},
+	{
+		name: "Categories",
+		href: "/dashboard/categories",
+		icon: Layers,
 	},
 	{
 		name: "Appointments",

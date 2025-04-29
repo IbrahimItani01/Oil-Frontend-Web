@@ -24,6 +24,9 @@ import { Product, productsData } from "./content/products.content";
 import { fetchServices } from "@/apis/services.apis";
 import { setServices } from "@/store/slices/services.slice";
 import { Service, servicesData } from "./content/services.content";
+import { fetchCategories } from "@/apis/categories.apis";
+import { categoriesData, Category } from "./content/categories.content";
+import { setCategories } from "@/store/slices/categories.slice";
 
 const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 	const dispatch = useAppDispatch();
@@ -41,7 +44,9 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 	const modifiedServices = useAppSelector(
 		(state) => state.services.modifiedServices
 	);
-
+	const modifiedCategories = useAppSelector(
+		(state) => state.categories.modifiedCategories
+	);
 	useEffect(() => {
 		const token = localStorage.getItem("token");
 		const hasSynced = localStorage.getItem("hasSynced");
@@ -87,6 +92,7 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 			const apiAppointments = await fetchAppointments();
 			const apiProducts = await fetchProducts();
 			const apiServices = await fetchServices();
+			const apiCategories = await fetchCategories();
 			dispatch(setUsers(apiUsers.length ? apiUsers : usersData));
 			dispatch(
 				setEmployees(apiEmployees.length ? apiEmployees : employeesData)
@@ -99,6 +105,9 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 			);
 			dispatch(setProducts(apiProducts.length ? apiProducts : productsData));
 			dispatch(setServices(apiServices.length ? apiServices : servicesData));
+			dispatch(
+				setCategories(apiCategories.length ? apiCategories : categoriesData)
+			);
 			// Clear sync flag after reload
 			localStorage.removeItem("hasSynced");
 
@@ -130,6 +139,10 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		console.log("Syncing modiifed services", data);
 		// TODO: Call your backend API here
 	};
+	const syncModifiedCategories = (data: Category[]) => {
+		console.log("Syncing modiifed categories", data);
+		// TODO: Call your backend API here
+	};
 	// Sync on unload
 	useSyncOnPageUnload("users", modifiedUsers, syncModifiedUsers);
 	useSyncOnPageUnload("employees", modifiedEmployees, syncModifiedEmployees);
@@ -140,6 +153,7 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 	);
 	useSyncOnPageUnload("products", modifiedProducts, syncModifiedProducts);
 	useSyncOnPageUnload("services", modifiedServices, syncModifiedServices);
+	useSyncOnPageUnload("categories", modifiedCategories, syncModifiedCategories);
 
 	// Sync on route change
 	useSyncOnRouteChange(modifiedUsers, "/dashboard/users", syncModifiedUsers);
@@ -162,6 +176,11 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		modifiedServices,
 		"/dashboard/services",
 		syncModifiedServices
+	);
+	useSyncOnRouteChange(
+		modifiedCategories,
+		"/dashboard/categories",
+		syncModifiedCategories
 	);
 	return <>{children}</>;
 };
