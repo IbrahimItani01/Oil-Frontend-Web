@@ -7,6 +7,11 @@ import {
 	appointmentsFilters,
 } from "@/lib/content/appointments.content";
 import {
+	categoriesFilter,
+	categoriesFilterDefault,
+	Category,
+} from "@/lib/content/categories.content";
+import {
 	Employee,
 	employeesFilter,
 	employeesFilterDefault,
@@ -25,6 +30,10 @@ import {
 	setQueriedAppointments,
 	setSelectedAppointmentStatus,
 } from "@/store/slices/appointments.slice";
+import {
+	setQueriedCategories,
+	setSelectedCategoryKey,
+} from "@/store/slices/categories.slice";
 import {
 	setQueriedEmployees,
 	setSelectedEmployeeStatus,
@@ -56,6 +65,7 @@ const FilterTabs = () => {
 	);
 	const allProducts = useAppSelector((state) => state.products.products);
 	const allServices = useAppSelector((state) => state.services.services);
+	const allCategories = useAppSelector((state) => state.categories.categories);
 
 	// Each section gets its own tab state
 	const [userTab, setUserTab] = useState(usersFilterDefault);
@@ -65,7 +75,7 @@ const FilterTabs = () => {
 	);
 	const [productTab, setProductTab] = useState(productsFilterDefault);
 	const [serviceTab, setServiceTab] = useState(servicesFilterDefault);
-
+	const [categoryTab, setCategoryTab] = useState(categoriesFilterDefault);
 	// Reset tabs when switching routes
 	useEffect(() => {
 		if (pathname === "/dashboard/users") {
@@ -93,6 +103,11 @@ const FilterTabs = () => {
 			dispatch(setSelectedServiceStatus(null));
 			dispatch(setQueriedServices(allServices));
 		}
+		if (pathname === "/dashboard/categories") {
+			setCategoryTab(categoriesFilterDefault);
+			dispatch(setSelectedCategoryKey(null));
+			dispatch(setQueriedCategories(allCategories));
+		}
 	}, [
 		pathname,
 		dispatch,
@@ -101,6 +116,7 @@ const FilterTabs = () => {
 		allAppointments,
 		allProducts,
 		allServices,
+		allCategories,
 	]);
 
 	if (pathname === "/dashboard/users") {
@@ -268,6 +284,41 @@ const FilterTabs = () => {
 							className='min-w-[100px] cursor-pointer transition-all duration-300 ease-in-out data-[state=active]:bg-white data-[state=active]:shadow-sm'
 							value={filter.value}
 							onClick={() => handleServicesFilter(filter.value)}
+						>
+							{filter.label}
+						</TabsTrigger>
+					))}
+				</TabsList>
+			</Tabs>
+		);
+	}
+	if (pathname === "/dashboard/categories") {
+		const handleCategoryFilter = (status: string) => {
+			setCategoryTab(status); // ✅ FIXED
+			const validStatuses = ["product", "service"] as const;
+
+			if (status === "all") {
+				dispatch(setSelectedCategoryKey(null));
+			} else if (validStatuses.includes(status as any)) {
+				dispatch(setSelectedCategoryKey(status as Category["for"]));
+			}
+
+			const filtered =
+				status === "all"
+					? allCategories
+					: allCategories.filter((e) => e.for === status);
+			dispatch(setQueriedCategories(filtered));
+		};
+
+		return (
+			<Tabs value={categoryTab}>
+				<TabsList className='bg-gray-100 p-1 rounded-lg'>
+					{categoriesFilter.map((filter, i) => (
+						<TabsTrigger
+							key={i}
+							className='min-w-[100px] cursor-pointer transition-all duration-300 ease-in-out data-[state=active]:bg-white data-[state=active]:shadow-sm'
+							value={filter.value}
+							onClick={() => handleCategoryFilter(filter.value)}
 						>
 							{filter.label}
 						</TabsTrigger>
