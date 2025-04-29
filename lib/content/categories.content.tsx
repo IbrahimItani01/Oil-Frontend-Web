@@ -18,7 +18,7 @@ export interface Category {
 	description: string;
 }
 
-export const categoryColums: Column[] = [
+export const categoriesColums: Column[] = [
 	{ id: "id", label: "ID" },
 	{ id: "name", label: "Name" },
 	{ id: "description", label: "Description" },
