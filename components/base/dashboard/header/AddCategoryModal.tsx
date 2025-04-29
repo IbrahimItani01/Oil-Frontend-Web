@@ -22,6 +22,7 @@ interface CatgoryFormData {
 	id: string;
 	name: string;
 	description: string;
+	for: "product" | "service";
 }
 interface AddCategoryModalProps {
 	open: boolean;
@@ -33,6 +34,7 @@ const CategoryModal = ({ open, onOpenChange }: AddCategoryModalProps) => {
 		name: "",
 		description: "",
 		id: "",
+		for: "product",
 	});
 	const dispatch = useDispatch();
 	const handleInputChange = (
@@ -40,6 +42,9 @@ const CategoryModal = ({ open, onOpenChange }: AddCategoryModalProps) => {
 	) => {
 		const { name, value } = e.target;
 		setFormData((prev) => ({ ...prev, [name]: value }));
+	};
+	const handleTypeChange = (value: "product" | "service") => {
+		setFormData((prev) => ({ ...prev, for: value }));
 	};
 
 	const handleSubmit = async (e: FormEvent) => {
@@ -51,6 +56,7 @@ const CategoryModal = ({ open, onOpenChange }: AddCategoryModalProps) => {
 			id,
 			name: formData.name,
 			description: formData.description,
+			for: formData.for,
 		};
 
 		dispatch(addCategory(newCategory));
@@ -62,6 +68,7 @@ const CategoryModal = ({ open, onOpenChange }: AddCategoryModalProps) => {
 			name: "",
 			description: "",
 			id: "",
+			for: "product",
 		});
 	};
 
@@ -83,6 +90,7 @@ const CategoryModal = ({ open, onOpenChange }: AddCategoryModalProps) => {
 					<InputBody
 						formData={formData}
 						handleInputChange={handleInputChange}
+						handleTypeChange={handleTypeChange}
 					/>
 
 					<ModalFooter

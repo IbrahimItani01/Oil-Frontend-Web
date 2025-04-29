@@ -4,6 +4,7 @@ import React from "react";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import CategoriesTableHeader from "./base/CategoriesTableHeader";
 import CategoriesDropDownActions from "./base/CategoryDropDownActions";
+import CategoryForCell from "./base/CategoryForCell";
 
 const CategoriesTable = () => {
 	const categories = useAppSelector(
@@ -20,6 +21,7 @@ const CategoriesTable = () => {
 							<TableCell className='font-medium'>{category.id}</TableCell>
 							<TableCell>{category.name}</TableCell>
 							<TableCell>{category.description}</TableCell>
+							<CategoryForCell category={category} />
 							<CategoriesDropDownActions category={category} />
 						</TableRow>
 					))}
