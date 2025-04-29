@@ -8,6 +8,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useAppSelector } from "@/store/store";
 import React from "react";
 
 interface InputBodyProps {
@@ -27,6 +28,10 @@ const InputBody = ({
 	handleInputChange,
 	handleTypeChange,
 }: InputBodyProps) => {
+	const categories = useAppSelector(
+		(state) => state.categories.queriedCategories
+	);
+	const productCategories = categories.filter((cat) => cat.for === "product");
 	return (
 		<div className='space-y-4'>
 			<div className='space-y-2'>
@@ -62,9 +67,14 @@ const InputBody = ({
 						<SelectValue placeholder='Select one of the options' />
 					</SelectTrigger>
 					<SelectContent>
-						<SelectItem value='type1'>Type 1</SelectItem>
-						<SelectItem value='type2'>Type 2</SelectItem>
-						<SelectItem value='type3'>Type 3</SelectItem>
+						{productCategories.map((category) => (
+							<SelectItem
+								key={category.id}
+								value={category.name}
+							>
+								{category.name}
+							</SelectItem>
+						))}
 					</SelectContent>
 				</Select>
 			</div>
