@@ -19,6 +19,7 @@ interface CategoryFormData {
 	id: string;
 	name: string;
 	description: string;
+	for: "product" | "service";
 }
 
 interface EditCategoryModalProps {
@@ -38,13 +39,16 @@ const EditCategoryModal = ({
 		id: category.id,
 		name: category.name,
 		description: category.description,
+		for: category.for,
 	});
 
 	useEffect(() => {
+		// Reset form data when category changes
 		setFormData({
 			id: category.id,
 			name: category.name,
 			description: category.description,
+			for: category.for,
 		});
 	}, [category]);
 
@@ -62,10 +66,16 @@ const EditCategoryModal = ({
 			id: category.id,
 			name: formData.name,
 			description: formData.description,
+			for: formData.for, // Make sure to use formData.for here
 		};
 
 		dispatch(updateCategory(updatedCategory));
 		onOpenChange(false);
+	};
+
+	const handleTypeChange = (value: "service" | "product") => {
+		// Update form data with the new type value
+		setFormData((prev) => ({ ...prev, for: value }));
 	};
 
 	return (
@@ -76,7 +86,7 @@ const EditCategoryModal = ({
 			<DialogContent className='sm:max-w-md md:max-w-lg'>
 				<DialogHeader>
 					<DialogTitle className='text-xl font-medium'>
-						Edit service
+						Edit Category
 					</DialogTitle>
 				</DialogHeader>
 				<form
@@ -86,8 +96,8 @@ const EditCategoryModal = ({
 					<InputBody
 						formData={formData}
 						handleInputChange={handleInputChange}
+						handleTypeChange={handleTypeChange}
 					/>
-
 					<ModalFooter
 						onOpenChange={onOpenChange}
 						resetForm={() => setFormData(category)}
