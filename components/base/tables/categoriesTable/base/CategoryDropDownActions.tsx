@@ -9,8 +9,13 @@ import { TableCell } from "@/components/ui/table";
 import { MoreHorizontal } from "lucide-react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Action, categoriesActions, Category } from "@/lib/content/categories.content";
+import {
+	Action,
+	categoriesActions,
+	Category,
+} from "@/lib/content/categories.content";
 import { deleteCategory } from "@/store/slices/categories.slice";
+import EditCategoryModal from "../EditCategoryModal";
 
 export interface CategoryCellProps {
 	category: Category;
@@ -69,12 +74,11 @@ const CategoriesDropDownActions = ({ category }: CategoryCellProps) => {
 				</DropdownMenuContent>
 			</DropdownMenu>
 
-			{/* TODO: fix the edit modal */}
-			{/* <EditserviceModal
+			<EditCategoryModal
 				open={editModalOpen}
 				onOpenChange={setEditModalOpen}
 				category={category}
-			/> */}
+			/>
 		</TableCell>
 	);
 };

@@ -10,65 +10,43 @@ import {
 } from "@/components/ui/dialog";
 
 import { useDispatch } from "react-redux";
-import { Service } from "@/lib/content/services.content";
-import ImagePreview from "../../dashboard/header/ServiceModal/ImagePreview";
-import InputBody from "../../dashboard/header/ServiceModal/InputBody";
-import ModalFooter from "../../dashboard/header/ServiceModal/ModalFooter";
-import { updateService } from "@/store/slices/services.slice";
+import { Category } from "@/lib/content/categories.content";
+import { updateCategory } from "@/store/slices/categories.slice";
+import InputBody from "../../dashboard/header/CategoryModal/InputBody";
+import ModalFooter from "../../dashboard/header/CategoryModal/ModalFooter";
 
-interface ServiceFormData {
+interface CategoryFormData {
 	id: string;
-	photo: string | null | File;
 	name: string;
-	type: string;
-	duration: string;
-	fee: number;
 	description: string;
-	status: "active" | "inactive";
 }
 
-interface EditServiceModalProps {
+interface EditCategoryModalProps {
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
-	service: Service;
+	category: Category;
 }
 
-const EditserviceModal = ({
+const EditCategoryModal = ({
 	open,
 	onOpenChange,
-	service,
-}: EditServiceModalProps) => {
+	category,
+}: EditCategoryModalProps) => {
 	const dispatch = useDispatch();
-	const fileInputRef = useRef<HTMLInputElement>(null);
-	const [imagePreview, setImagePreview] = useState<string | null>(null);
-	const [isDragging, setIsDragging] = useState(false);
 
-	const [formData, setFormData] = useState<ServiceFormData>({
-		id: service.id,
-		name: service.name,
-		description: service.description,
-		fee: service.fee,
-		type: service.type,
-		photo: null,
-		duration: service.duration,
-		status: service.status,
+	const [formData, setFormData] = useState<CategoryFormData>({
+		id: category.id,
+		name: category.name,
+		description: category.description,
 	});
 
 	useEffect(() => {
-		if (service?.photo) {
-			setImagePreview(service.photo);
-		}
 		setFormData({
-			id: service.id,
-			name: service.name,
-			description: service.description,
-			fee: service.fee,
-			type: service.type,
-			photo: null,
-			duration: service.duration,
-			status: service.status,
+			id: category.id,
+			name: category.name,
+			description: category.description,
 		});
-	}, [service]);
+	}, [category]);
 
 	const handleInputChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -77,74 +55,16 @@ const EditserviceModal = ({
 		setFormData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-		const file = e.target.files?.[0];
-		if (file) {
-			setFormData((prev) => ({ ...prev, photo: file }));
-			const reader = new FileReader();
-			reader.onload = () => setImagePreview(reader.result as string);
-			reader.readAsDataURL(file);
-		}
-	};
-
-	const handleDragOver = (e: React.DragEvent) => {
-		e.preventDefault();
-		setIsDragging(true);
-	};
-	const handleDrop = (e: React.DragEvent) => {
-		e.preventDefault();
-		setIsDragging(false);
-		const file = e.dataTransfer.files?.[0];
-		if (file) {
-			setFormData((prev) => ({ ...prev, photo: file }));
-			const reader = new FileReader();
-			reader.onload = () => setImagePreview(reader.result as string);
-			reader.readAsDataURL(file);
-		}
-	};
-	const handleDragLeave = (e: React.DragEvent) => {
-		e.preventDefault();
-		setIsDragging(false);
-	};
-
-	const handleTypeChange = (value: string) => {
-		setFormData((prev) => ({ ...prev, type: value }));
-	};
-
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 
-		let photoFilename = "";
-		let uploadedImagePath = service.photo;
-
-		if (formData.photo instanceof File) {
-			let extension = formData.photo.name.split(".").pop();
-			photoFilename = `${service.id}-service.${extension}`;
-
-			const imageForm = new FormData();
-			imageForm.append("image", formData.photo, photoFilename);
-
-			// Upload logic here
-			// await fetch("/api/upload/service-image", {
-			// 	method: "POST",
-			// 	body: imageForm,
-			// });
-
-			uploadedImagePath = `/static/servicesImages/${photoFilename}`;
-		}
-
-		const updatedservice: Service = {
-			id: service.id,
+		const updatedCategory: Category = {
+			id: category.id,
 			name: formData.name,
 			description: formData.description,
-			fee: formData.fee,
-			type: formData.type,
-			photo: uploadedImagePath ?? "",
-			duration: formData.duration,
-			status: formData.status,
 		};
 
-		dispatch(updateService(updatedservice));
+		dispatch(updateCategory(updatedCategory));
 		onOpenChange(false);
 	};
 
@@ -163,25 +83,14 @@ const EditserviceModal = ({
 					onSubmit={handleSubmit}
 					className='space-y-6'
 				>
-					<ImagePreview
-						fileInputRef={fileInputRef}
-						handleDragLeave={handleDragLeave}
-						handleDragOver={handleDragOver}
-						handleDrop={handleDrop}
-						handleImageUpload={handleImageUpload}
-						imagePreview={imagePreview}
-						isDragging={isDragging}
-					/>
-
 					<InputBody
 						formData={formData}
 						handleInputChange={handleInputChange}
-						handleTypeChange={handleTypeChange}
 					/>
 
 					<ModalFooter
 						onOpenChange={onOpenChange}
-						resetForm={() => setFormData(service)}
+						resetForm={() => setFormData(category)}
 						isEdit={true}
 					/>
 				</form>
@@ -190,4 +99,4 @@ const EditserviceModal = ({
 	);
 };
 
-export default EditserviceModal;
+export default EditCategoryModal;

@@ -13,9 +13,10 @@ import {
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { Category } from "@/lib/content/categories.content";
-import { addCategory } from "@/store/slices/categories.slice";
+import { addCategory, setCategories } from "@/store/slices/categories.slice";
 import InputBody from "./CategoryModal/InputBody";
 import ModalFooter from "./CategoryModal/ModalFooter";
+import { useAppSelector } from "@/store/store";
 
 interface CatgoryFormData {
 	id: string;
@@ -34,7 +35,6 @@ const CategoryModal = ({ open, onOpenChange }: AddCategoryModalProps) => {
 		id: "",
 	});
 	const dispatch = useDispatch();
-
 	const handleInputChange = (
 		e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
@@ -72,7 +72,9 @@ const CategoryModal = ({ open, onOpenChange }: AddCategoryModalProps) => {
 		>
 			<DialogContent className='sm:max-w-md md:max-w-lg'>
 				<DialogHeader>
-					<DialogTitle className='text-xl font-medium'>Add Category</DialogTitle>
+					<DialogTitle className='text-xl font-medium'>
+						Add Category
+					</DialogTitle>
 				</DialogHeader>
 				<form
 					onSubmit={handleSubmit}

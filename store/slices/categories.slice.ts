@@ -1,4 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+const removeDuplicateCategories = (modifiedCategories: Category[]) => {
+	const unique = new Map();
+	modifiedCategories.forEach((category) => {
+		unique.set(category.id, category);
+	});
+	return Array.from(unique.values());
+};
 
 export interface Category {
 	id: string;
@@ -31,6 +38,7 @@ const CategoriesSlice = createSlice({
 		},
 		addCategory(state, action: PayloadAction<Category>) {
 			state.categories.push(action.payload);
+			state.queriedCategories.push(action.payload);
 		},
 		updateCategory(state, action: PayloadAction<Category>) {
 			const index = state.categories.findIndex(
@@ -38,11 +46,23 @@ const CategoriesSlice = createSlice({
 			);
 			if (index !== -1) {
 				state.categories[index] = action.payload;
-				state.modifiedCategories.push(action.payload);
 			}
+			const qIndex = state.queriedCategories.findIndex(
+				(c) => c.id === action.payload.id
+			);
+			if (qIndex !== -1) {
+				state.queriedCategories[qIndex] = action.payload;
+			}
+			state.modifiedCategories.push(action.payload);
+			state.modifiedCategories = removeDuplicateCategories(
+				state.modifiedCategories
+			);
 		},
 		deleteCategory(state, action: PayloadAction<string>) {
 			state.categories = state.categories.filter(
+				(c) => c.id !== action.payload
+			);
+			state.queriedCategories = state.queriedCategories.filter(
 				(c) => c.id !== action.payload
 			);
 		},
