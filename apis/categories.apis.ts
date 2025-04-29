@@ -1,13 +1,14 @@
 import { Appointment } from "@/lib/content/appointments.content";
+import { Category } from "@/lib/content/categories.content";
 import { Product } from "@/lib/content/products.content";
 import { Service } from "@/lib/content/services.content";
 import axios from "axios";
 
-export const syncModifiedServices = async (modifiedProducts: Service[]) => {
-	const syncUrl = process?.env?.NEXT_PUBLIC_SERVICES_SYNC_DATA_URL;
+export const syncModifiedCategories = async (modifiedCatgories: Category[]) => {
+	const syncUrl = process?.env?.NEXT_PUBLIC_CATEGORIES_SYNC_DATA_URL;
 	if (syncUrl) {
 		try {
-			await axios.post(syncUrl, modifiedProducts, {
+			await axios.post(syncUrl, modifiedCatgories, {
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -17,7 +18,7 @@ export const syncModifiedServices = async (modifiedProducts: Service[]) => {
 		}
 	}
 };
-export const fetchServices = async (): Promise<Service[]> => {
+export const fetchCategories = async (): Promise<Category[]> => {
 	try {
 		// Replace with actual API call in future
 		// const response = await axios.get("/api/employees");
@@ -25,7 +26,7 @@ export const fetchServices = async (): Promise<Service[]> => {
 
 		return [];
 	} catch (error) {
-		console.error("Failed to fetch services:", error);
+		console.error("Failed to fetch categories:", error);
 		return [];
 	}
 };
