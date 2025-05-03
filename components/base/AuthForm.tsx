@@ -33,14 +33,14 @@ export default function AuthForm() {
 		e.preventDefault();
 
 		try {
-			setisLoading(true)
-			const { userName, jwtToken } = await handleLogin(formData);
+			setisLoading(true);
+			const { userName, jwtToken, userPhoto } = await handleLogin(formData);
 			localStorage.setItem("token", jwtToken);
-			dispatch(login({ userName, jwtToken }));
+			dispatch(login({ userName, jwtToken, userPhoto }));
 
 			console.log("User logged in:", { userName, jwtToken });
 			navigate.push("/dashboard");
-			setisLoading(false)
+			setisLoading(false);
 		} catch (error) {
 			console.error("Login failed:", error);
 		}

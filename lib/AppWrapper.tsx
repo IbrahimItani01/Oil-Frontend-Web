@@ -52,11 +52,11 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		const hasSynced = localStorage.getItem("hasSynced");
 
 		const initializeData = async () => {
-			// if (!token) {
-			// 	// router.push("/auth");
-			// 	router.push("/dashboard");
-			// 	return;
-			// }
+			if (!token) {
+				router.push("/auth");
+				// router.push("/dashboard");
+				return;
+			}
 
 			// if (!hasSynced && token) {
 			// 	try {
