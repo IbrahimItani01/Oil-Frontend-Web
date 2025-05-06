@@ -3,29 +3,19 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Logo from "../../public/logo.png";
-import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
-
+import { useSelector } from "react-redux";
 const SplashScreen = () => {
-	const [progress, setProgress] = useState(0);
+	const loading = useSelector((state: any) => state.app.loading); // Access loading from Redux state
 	const [visible, setVisible] = useState(true);
 
 	useEffect(() => {
-		const interval = setInterval(() => {
-			setProgress((prev) => {
-				if (prev >= 100) {
-					clearInterval(interval);
-					// Start fade out animation after short delay
-					setTimeout(() => setVisible(false), 500);
-					return 100;
-				}
-				return prev + 1; // Smaller increments for smoother transition
-			});
-		}, 30); // Faster interval (30ms)
-
-		return () => clearInterval(interval);
-	}, []);
+		if (!loading) {
+			// Start fade-out animation after the loading is complete
+			setTimeout(() => setVisible(false), 500);
+		}
+	}, [loading]); // Trigger whenever loading state changes
 
 	if (!visible) return null;
 
