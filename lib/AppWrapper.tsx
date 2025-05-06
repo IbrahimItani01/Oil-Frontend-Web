@@ -27,6 +27,12 @@ import { Service, servicesData } from "./content/services.content";
 import { fetchCategories } from "@/apis/categories.apis";
 import { categoriesData, Category } from "./content/categories.content";
 import { setCategories } from "@/store/slices/categories.slice";
+import {
+	setLoaderOff,
+	setLoaderOn,
+	setLoadingFalse,
+} from "@/store/slices/app.slice";
+import Loader from "@/components/base/Loader";
 
 const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 	const dispatch = useAppDispatch();
@@ -50,15 +56,22 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
-		const hasSynced = localStorage.getItem("hasSynced");
+		const hasRedirected = sessionStorage.getItem("hasRedirected");
 
 		const initializeData = async () => {
+			dispatch(setLoaderOn());
+
 			if (!token) {
 				router.push("/auth");
 				return;
 			}
 
-			// Wait for all data fetching to complete
+			// Only redirect to dashboard on the first load
+			if (!hasRedirected) {
+				sessionStorage.setItem("hasRedirected", "true");
+				router.push("/dashboard");
+			}
+
 			try {
 				const [
 					apiUsers,
@@ -95,10 +108,8 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 					setCategories(apiCategories.length ? apiCategories : categoriesData)
 				);
 
-				// Clear sync flag after reload
-				localStorage.removeItem("hasSynced");
-
-				router.push("/dashboard");
+				dispatch(setLoadingFalse());
+				dispatch(setLoaderOff());
 			} catch (error) {
 				console.error("Failed to fetch data:", error);
 			}
@@ -174,7 +185,12 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		syncModifiedCategories
 	);
 
-	return <>{children}</>;
+	return (
+		<>
+			<Loader />
+			{children}
+		</>
+	);
 };
 
 export default AppWrapper;
