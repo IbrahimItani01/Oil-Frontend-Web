@@ -47,6 +47,7 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 	const modifiedCategories = useAppSelector(
 		(state) => state.categories.modifiedCategories
 	);
+
 	useEffect(() => {
 		const token = localStorage.getItem("token");
 		const hasSynced = localStorage.getItem("hasSynced");
@@ -54,64 +55,53 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		const initializeData = async () => {
 			if (!token) {
 				router.push("/auth");
-				// router.push("/dashboard");
 				return;
 			}
 
-			// if (!hasSynced && token) {
-			// 	try {
-			// 		const apiUsers = await fetchUsers();
-			// 		const apiEmployees = await fetchEmployees();
-			// 		const apiOrders = await fetchOrders();
-			// 		const apiAppointments = await fetchAppointments();
-			// 		const apiProducts = await fetchProducts();
-			// 		const apiServices = await fetchServices();
-			// 		dispatch(setUsers(apiUsers.length ? apiUsers : usersData));
-			// 		dispatch(
-			// 			setEmployees(apiEmployees.length ? apiEmployees : employeesData)
-			// 		);
-			// 		dispatch(setOrders(apiOrders.length ? apiOrders : ordersData));
-			// 		dispatch(
-			// 			setAppointments(
-			// 				apiAppointments.length ? apiAppointments : appointmentsData
-			// 			)
-			// 		);
-			// 		dispatch(
-			// 			setProducts(apiProducts.length ? apiProducts : productsData)
-			// 		);
-			// 		dispatch(
-			// 			setServices(apiServices.length ? apiServices : servicesData)
-			// 		);
-			// 	} catch (error) {
-			// 		console.error("Failed to fetch data:", error);
-			// 	}
-			// }
-			const apiUsers = await fetchUsers();
-			const apiEmployees = await fetchEmployees();
-			const apiOrders = await fetchOrders();
-			const apiAppointments = await fetchAppointments();
-			const apiProducts = await fetchProducts();
-			const apiServices = await fetchServices();
-			const apiCategories = await fetchCategories();
-			dispatch(setUsers(apiUsers.length ? apiUsers : usersData));
-			dispatch(
-				setEmployees(apiEmployees.length ? apiEmployees : employeesData)
-			);
-			dispatch(setOrders(apiOrders.length ? apiOrders : ordersData));
-			dispatch(
-				setAppointments(
-					apiAppointments.length ? apiAppointments : appointmentsData
-				)
-			);
-			dispatch(setProducts(apiProducts.length ? apiProducts : productsData));
-			dispatch(setServices(apiServices.length ? apiServices : servicesData));
-			dispatch(
-				setCategories(apiCategories.length ? apiCategories : categoriesData)
-			);
-			// Clear sync flag after reload
-			localStorage.removeItem("hasSynced");
+			// Wait for all data fetching to complete
+			try {
+				const [
+					apiUsers,
+					apiEmployees,
+					apiOrders,
+					apiAppointments,
+					apiProducts,
+					apiServices,
+					apiCategories,
+				] = await Promise.all([
+					fetchUsers(),
+					fetchEmployees(),
+					fetchOrders(),
+					fetchAppointments(),
+					fetchProducts(),
+					fetchServices(),
+					fetchCategories(),
+				]);
 
-			router.push("/dashboard");
+				// Dispatch data to store
+				dispatch(setUsers(apiUsers.length ? apiUsers : usersData));
+				dispatch(
+					setEmployees(apiEmployees.length ? apiEmployees : employeesData)
+				);
+				dispatch(setOrders(apiOrders.length ? apiOrders : ordersData));
+				dispatch(
+					setAppointments(
+						apiAppointments.length ? apiAppointments : appointmentsData
+					)
+				);
+				dispatch(setProducts(apiProducts.length ? apiProducts : productsData));
+				dispatch(setServices(apiServices.length ? apiServices : servicesData));
+				dispatch(
+					setCategories(apiCategories.length ? apiCategories : categoriesData)
+				);
+
+				// Clear sync flag after reload
+				localStorage.removeItem("hasSynced");
+
+				router.push("/dashboard");
+			} catch (error) {
+				console.error("Failed to fetch data:", error);
+			}
 		};
 
 		initializeData();
@@ -128,21 +118,22 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		// TODO: Call your backend API here
 	};
 	const syncModifiedAppointments = (data: Appointment[]) => {
-		console.log("Syncing modiifed appointments", data);
+		console.log("Syncing modified appointments", data);
 		// TODO: Call your backend API here
 	};
 	const syncModifiedProducts = (data: Product[]) => {
-		console.log("Syncing modiifed products", data);
+		console.log("Syncing modified products", data);
 		// TODO: Call your backend API here
 	};
 	const syncModifiedServices = (data: Service[]) => {
-		console.log("Syncing modiifed services", data);
+		console.log("Syncing modified services", data);
 		// TODO: Call your backend API here
 	};
 	const syncModifiedCategories = (data: Category[]) => {
-		console.log("Syncing modiifed categories", data);
+		console.log("Syncing modified categories", data);
 		// TODO: Call your backend API here
 	};
+
 	// Sync on unload
 	useSyncOnPageUnload("users", modifiedUsers, syncModifiedUsers);
 	useSyncOnPageUnload("employees", modifiedEmployees, syncModifiedEmployees);
@@ -182,6 +173,7 @@ const AppWrapper = ({ children }: { children: React.ReactNode }) => {
 		"/dashboard/categories",
 		syncModifiedCategories
 	);
+
 	return <>{children}</>;
 };
 

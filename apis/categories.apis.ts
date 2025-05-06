@@ -19,12 +19,32 @@ export const syncModifiedCategories = async (modifiedCatgories: Category[]) => {
 	}
 };
 export const fetchCategories = async (): Promise<Category[]> => {
+	// Fetch categories from products
 	try {
-		// Replace with actual API call in future
-		// const response = await axios.get("/api/employees");
-		// return response.data;
+		const response = await axios.get(process.env.NEXT_PUBLIC_PRODUCTS_GET_URL!);
+		const productsRaw = response.data.data.data;
 
-		return [];
+		const seenCategoryIds = new Set<string>();
+		const categories: Category[] = [];
+
+		for (const p of productsRaw) {
+			const category = p.category;
+
+			if (category && !seenCategoryIds.has(String(category.id))) {
+				seenCategoryIds.add(String(category.id));
+				categories.push({
+					id: String(category.id),
+					name: category.name,
+					description: category.description || "",
+					for: "product",
+				});
+			}
+		}
+
+		// Sort by numeric id ascending
+		categories.sort((a, b) => Number(a.id) - Number(b.id));
+
+		return categories;
 	} catch (error) {
 		console.error("Failed to fetch categories:", error);
 		return [];

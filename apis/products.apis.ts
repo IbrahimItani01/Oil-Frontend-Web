@@ -17,11 +17,21 @@ export const syncModifiedProducts = async (modifiedProducts: Product[]) => {
 };
 export const fetchProducts = async (): Promise<Product[]> => {
 	try {
-		// Replace with actual API call in future
-		// const response = await axios.get("/api/employees");
-		// return response.data;
+		const response = await axios.get(process.env.NEXT_PUBLIC_PRODUCTS_GET_URL!);
+		const products = response.data.data.data;
 
-		return [];
+		const formattedProducts: Product[] = products.map((p: any) => ({
+			id: String(p.id),
+			photo: p.image_url,
+			name: p.name,
+			type: p.category?.name || "",
+			amountSold: 0,
+			price: parseFloat(p.price),
+			description: p.description || "",
+			status: p.status === "active" ? "active" : "inactive",
+		}));
+
+		return formattedProducts;
 	} catch (error) {
 		console.error("Failed to fetch products:", error);
 		return [];
