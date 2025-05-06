@@ -19,11 +19,21 @@ export const syncModifiedServices = async (modifiedProducts: Service[]) => {
 };
 export const fetchServices = async (): Promise<Service[]> => {
 	try {
-		// Replace with actual API call in future
-		// const response = await axios.get("/api/employees");
-		// return response.data;
+		const response = await axios.get(process.env.NEXT_PUBLIC_SERVICES_GET_URL!);
+		const servicesRaw = response.data.data.data;
 
-		return [];
+		const services: Service[] = servicesRaw.map((s: any) => ({
+			id: String(s.id),
+			photo: "", // No image field in API, set blank or update if added later
+			name: s.name,
+			type: s.category?.name || "",
+			fee: parseFloat(s.fee),
+			duration: String(s.duration),
+			description: s.description || "",
+			status: s.status === "active" ? "active" : "inactive",
+		}));
+
+		return services;
 	} catch (error) {
 		console.error("Failed to fetch services:", error);
 		return [];
