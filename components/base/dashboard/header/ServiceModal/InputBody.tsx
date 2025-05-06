@@ -32,7 +32,9 @@ const InputBody = ({
 	const categories = useAppSelector(
 		(state) => state.categories.queriedCategories
 	);
-	const serviceCategories = categories.filter((cat) => cat.for === "service");
+	const serviceCategories = categories.filter(
+		(cat) => cat.for === "service" || "both"
+	);
 
 	return (
 		<div className='space-y-4'>

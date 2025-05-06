@@ -295,7 +295,7 @@ const FilterTabs = () => {
 	if (pathname === "/dashboard/categories") {
 		const handleCategoryFilter = (status: string) => {
 			setCategoryTab(status); // ✅ FIXED
-			const validStatuses = ["product", "service"] as const;
+			const validStatuses = ["product", "service", "both"] as const;
 
 			if (status === "all") {
 				dispatch(setSelectedCategoryKey(null));

@@ -16,7 +16,7 @@ export interface Category {
 	id: string;
 	name: string;
 	description: string;
-	for: "product" | "service";
+	for: "product" | "service" | "both";
 }
 
 export const categoriesColums: Column[] = [
@@ -55,6 +55,10 @@ export const categoriesFilter: Filter[] = [
 	{
 		value: "service",
 		label: "For Service",
+	},
+	{
+		value: "both",
+		label: "For Both",
 	},
 ];
 
