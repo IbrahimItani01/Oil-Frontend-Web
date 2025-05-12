@@ -20,7 +20,6 @@ const Loader = ({ text, className }: LoaderProps) => {
 	const pathname = usePathname();
 
 	if (!isLoading || pathname === "/") return null;
-    console.log("toz")
 	return (
 		<div
 			className={cn(

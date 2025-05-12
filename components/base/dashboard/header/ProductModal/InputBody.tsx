@@ -72,7 +72,7 @@ const InputBody = ({
 						{productCategories.map((category) => (
 							<SelectItem
 								key={category.id}
-								value={category.name}
+								value={category.id}
 							>
 								{category.name}
 							</SelectItem>

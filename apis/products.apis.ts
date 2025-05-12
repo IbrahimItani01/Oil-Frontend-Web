@@ -1,3 +1,4 @@
+import { ProductFormData } from "@/components/base/dashboard/header/AddProductModal";
 import { Product } from "@/lib/content/products.content";
 import axios from "axios";
 
@@ -35,5 +36,34 @@ export const fetchProducts = async (): Promise<Product[]> => {
 	} catch (error) {
 		console.error("Failed to fetch products:", error);
 		return [];
+	}
+};
+export const createProduct = async (data: ProductFormData, token: string) => {
+	try {
+		const formData = new FormData();
+		formData.append("name", data.name);
+		formData.append("price", data.price.toString());
+		formData.append("description", data.description);
+		formData.append("category_id", data.type);
+
+		if (data.photo) {
+			formData.append("image", data.photo);
+		}
+
+		const response = await axios.post(
+			process.env.NEXT_PUBLIC_PRODUCTS_CREATE_URL!,
+			formData,
+			{
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "multipart/form-data",
+				},
+			}
+		);
+
+		return response.data.data.product;
+	} catch (error) {
+		console.error("Product creation failed", error);
+		throw error;
 	}
 };

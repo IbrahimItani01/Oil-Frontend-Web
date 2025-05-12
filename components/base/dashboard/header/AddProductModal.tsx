@@ -17,8 +17,10 @@ import { Product } from "@/lib/content/products.content";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { addProduct } from "@/store/slices/products.slice";
+import { createProduct } from "@/apis/products.apis";
+import { setLoaderOff, setLoaderOn } from "@/store/slices/app.slice";
 
-interface ProductFormData {
+export interface ProductFormData {
 	id: string;
 	photo: File | null;
 	name: string;
@@ -59,7 +61,7 @@ const ProductModal = ({ open, onOpenChange }: AddProductModalProps) => {
 	const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
 		if (file) {
-			setFormData((prev) => ({ ...prev, image: file }));
+			setFormData((prev) => ({ ...prev, photo: file }));
 			const reader = new FileReader();
 			reader.onload = () => {
 				setImagePreview(reader.result as string);
@@ -77,7 +79,7 @@ const ProductModal = ({ open, onOpenChange }: AddProductModalProps) => {
 		setIsDragging(false);
 		const file = e.dataTransfer.files?.[0];
 		if (file) {
-			setFormData((prev) => ({ ...prev, image: file }));
+			setFormData((prev) => ({ ...prev, photo: file }));
 			const reader = new FileReader();
 			reader.onload = () => {
 				setImagePreview(reader.result as string);
@@ -92,45 +94,23 @@ const ProductModal = ({ open, onOpenChange }: AddProductModalProps) => {
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
-
-		const id = uuidv4().slice(0, 3);
-		let photoFilename = "";
-		let uploadedImagePath;
-		if (formData.photo) {
-			const extension = formData.photo.name.split(".").pop();
-			photoFilename = `${id}-product.${extension}`;
-
-			const imageForm = new FormData();
-			imageForm.append("image", formData.photo, photoFilename);
-
-			// Upload the image
-			// const response = await fetch("/api/upload/product-image", {
-			// 	method: "POST",
-			// 	body: imageForm,
-			// });
-
-			// if (!response.ok) {
-			// 	console.error("Image upload failed");
-			// 	return;
-			// }
-
-			uploadedImagePath = `/static/productsImages/${photoFilename}`;
-		}
-
-		const newProduct: Product = {
-			id,
-			name: formData.name,
-			description: formData.description,
-			price: formData.price,
-			type: formData.type,
-			photo: uploadedImagePath ?? "",
-			amountSold: formData.amountSold,
-			status: formData.status === "active" ? "active" : "inactive",
-		};
-
-		dispatch(addProduct(newProduct));
 		onOpenChange(false);
+		dispatch(setLoaderOn());
+		const token = localStorage.token;
+		const productData = await createProduct(formData, token);
+		const returnedProduct: Product = {
+			id: productData.id.toString(),
+			name: productData.name,
+			description: productData.description,
+			price: parseFloat(productData.price),
+			type: productData.category_id,
+			photo: productData.image_url,
+			amountSold: 0,
+			status: "active",
+		};
+		dispatch(addProduct(returnedProduct));
 		resetForm();
+		dispatch(setLoaderOff());
 	};
 	const resetForm = () => {
 		setFormData({
